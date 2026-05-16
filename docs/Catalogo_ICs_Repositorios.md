@@ -1,0 +1,75 @@
+# Catálogo de ICs e Repositórios
+
+**UNIVERSIDADE FEDERAL DO CEARÁ**
+**ENGENHARIA DA COMPUTAÇÃO — SOBRAL**
+
+---
+
+## 1. Metadados do Projeto
+
+- **Nome do Projeto:** Cafeteria Gourmet
+- **Responsável pela Gerência de Configuração (GC):** Ynã Ponte
+- **Data de Criação:** 07/04/2026
+- **Última Atualização:** 13/04/2026
+
+---
+
+## 2. Itens de Configuração (ICs)
+
+| ID do IC | Nome do Item | Tipo (Código/Doc/Teste) | Localização (Repositório) | Versão Atual | Responsável | Status |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| IC-001 | Documentação do Projeto | Documentação | [GitHub/README.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/README.md) | `v1.0.0` | Tadeu Jerônimo | Ativo |
+| IC-002 | Configuração de Dependências e Build Backend | Dependências e Builds | [GitHub/back](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/back) | `v1.0.0` | Tadeu Jerônimo | Ativo |
+| IC-003 | Aplicação Express | Código | [GitHub/app.js](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/back/app.js) | `v1.0.0` | Tadeu Jerônimo | Ativo |
+| IC-004 | Inicialização do Servidor | Código |[GitHub/server.js](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/back/server.js) | `v1.0.0` | Lanna Mesquita | Ativo |
+| IC-005 | Modelo de Dados (Persistência Prisma) | Código | [GitHub/prisma](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/back) | `v1.0.0` | Lanna Mesquita | Ativo |
+| IC-006 | Rotas da API | Código | [GitHub/routes](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/back/src/routes) | `v1.0.0` | Lanna Mesquita | Ativo |
+| IC-007 | Controller de Pedidos | Código | [GitHub/pedidosController.js](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/back/src/controllers/pedidosController.js) | `v1.0.0` | Ynã Ponte | Ativo |
+| IC-008 | Regras de Versionamento (Gitignore) | Configuração | [GitHub/.gitignore](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/.gitignore) | `v1.0.0`, `baseline-2026-04-08` | Ynã Ponte | Ativo |
+| IC-009 | Configuração de Dependências Frontend | Configuração | [GitHub/front](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front) | `v1.0.0` | Ynã Ponte | Ativo |
+| IC-010 | Núcleo da Interface | Código | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
+| IC-011 | Telas Funcionais (Interface de Usuário) | Código | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
+| IC-012 | Testes Automatizados | Teste | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
+
+---
+
+## 3. Repositórios
+
+| Nome do Repositório | Tipo (Git/Artefato) | URL | Descrição |
+|:---:|:---:|:---:|:---:|
+| EstudosEspeciais | Git (GitHub) | https://github.com/Lanna-Maria/EstudosEspeciais | Repositório principal do projeto |
+| EstudosEspeciais — Backend | Git (GitHub) | https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/back | Código-fonte do backend (Node/Express) |
+| EstudosEspeciais — Frontend | Git (GitHub) | https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front | Código-fonte do frontend (React) |
+| EstudosEspeciais — Docs | Git (GitHub) | https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/docs | Documentação técnica e lista de ICs |
+
+---
+
+## 4. Controle de Versões
+
+- **Política de Versionamento:** Versionamento Semântico (vMAIOR.MENOR.PATCH) — ex.: `v1.0.0`
+- **Ferramenta:** Git Tags / GitHub Releases
+
+```bash
+# Criar tag anotada para a release v1.0.0
+git tag -a v1.0.0 -m "Release v1.0.0 — Entrega inicial do projeto EstudosEspeciais"
+
+# Publicar todas as tags no repositório remoto
+git push origin --tags
+```
+
+---
+
+## 5. Histórico de Mudanças
+ 
+| Data | Versão | Alteração | Autor |
+|:---|:---|:---|:---|
+| 08/04/2026 | v1.0.0 | Initial commit: estrutura inicial do repositório | Lanna Mesquita |
+| 08/04/2026 | v1.0.0 | Primeiro commit: configuração inicial do projeto | Lanna Mesquita |
+| 08/04/2026 | v1.0.0 | Adição do IC-008: configuração do .gitignore | Lanna Mesquita |
+| 13/04/2026 | v1.0.0 | Atualização do IC-001: reorganiza .env.example e README | Tadeu Jerônimo |
+| 13/04/2026 | v1.0.0 | Criação do arquivo docs/ConfigurationItens.md | Tadeu Jerônimo |
+| 13/04/2026 | v1.0.0 | Registro dos IC-001, IC-002 e IC-003 na documentação | Tadeu Jerônimo |
+| 13/04/2026 | v1.0.0 | Registro dos IC-004, IC-005 e IC-006 na documentação | Lanna Mesquita |
+| 13/04/2026 | v1.0.0 | Registro dos IC-004, IC-005 e IC-006 na documentação (correção) | Lanna Mesquita |
+| 13/04/2026 | v1.0.0 | Registro dos IC-007, IC-008 e IC-009 na documentação | Ynã Ponte |
+| 14/04/2026 | v1.0.0 | Registro dos IC-010, IC-011 e IC-012 na documentação | Alanna Paiva|
