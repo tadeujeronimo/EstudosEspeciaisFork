@@ -31,8 +31,6 @@ export default function AdminLogin() {
       if (res.ok) {
         // salva dados do admin
         localStorage.setItem('admin', JSON.stringify(data.admin));
-
-        // marca como logado
         localStorage.setItem('auth', 'true');
 
         navigate('/admin/dashboard');
@@ -48,7 +46,6 @@ export default function AdminLogin() {
     <div className="login-container">
       <form className="login-form" onSubmit={handleLogin}>
         <h2>Painel Administrativo</h2>
-
         <input
           type="email"
           placeholder="Email"
@@ -56,7 +53,6 @@ export default function AdminLogin() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <input
           type="password"
           placeholder="Senha"
@@ -64,9 +60,7 @@ export default function AdminLogin() {
           onChange={(e) => setSenha(e.target.value)}
           required
         />
-
         {erro && <p className="erro">{erro}</p>}
-
         <button type="submit">Entrar</button>
       </form>
     </div>

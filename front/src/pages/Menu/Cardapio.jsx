@@ -3,11 +3,11 @@ import { Tab, Tabs } from 'react-bootstrap';
 import './Cardapio.css';
 import axios from 'axios';
 
-import coffe1 from '../assets/imagens/cafe.png';
-import coffe2 from '../assets/imagens/sobremesa.png';
-import coffe3 from '../assets/imagens/salgados.png';
-import coffe4 from '../assets/imagens/bebidaGelada.png';
-import coffe5 from '../assets/imagens/cha.png';
+import coffe1 from '../../assets/imagens/cafe.png';
+import coffe2 from '../../assets/imagens/sobremesa.png';
+import coffe3 from '../../assets/imagens/salgados.png';
+import coffe4 from '../../assets/imagens/bebidaGelada.png';
+import coffe5 from '../../assets/imagens/cha.png';
 
 function Cardapio() {
   const [currentImage, setCurrentImage] = useState(coffe1);
@@ -19,7 +19,6 @@ function Cardapio() {
     chas: [],
   });
 
-  // Buscar dados do backend ao montar o componente
   useEffect(() => {
     axios
       .get('http://localhost:4000/api/cardapio')

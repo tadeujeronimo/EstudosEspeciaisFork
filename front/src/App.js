@@ -6,42 +6,32 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import Header from './components/Header';
-import Footer from './components/Footer';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 
-import Inicio from './pages/Inicio';
-import Cardapio from './pages/Cardapio';
-import Pedidos from './pages/Pedidos';
+import Inicio from './pages/Home/Inicio';
+import Cardapio from './pages/Menu/Cardapio';
+import Pedidos from './pages/Orders/Pedidos';
 import NotFound from './pages/NotFound';
 
-import AdminLogin from './pages/AdminLogin';
-import Dashboard from './dashboard/Dashboard';
-import PrivateRoute from './components/PrivateRoute';
+import AdminLogin from './pages/Login/AdminLogin';
+import Dashboard from './pages/Dashboard/Dashboard';
+import PrivateRoute from './routes/PrivateRoute';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-//  Conteúdo principal (usa useLocation)
 function AppContent() {
   const location = useLocation();
-
-  //  só o dashboard NÃO terá header/footer
   const isDashboard = location.pathname.startsWith('/admin/dashboard');
 
   return (
     <>
-      {/* HEADER */}
       {!isDashboard && <Header />}
-
       <Routes>
-        {/* ROTAS PÚBLICAS */}
         <Route path="/" element={<Inicio />} />
         <Route path="/cardapio" element={<Cardapio />} />
         <Route path="/pedidos" element={<Pedidos />} />
-
-        {/* LOGIN ADMIN (COM HEADER/FOOTER) */}
         <Route path="/admin/login" element={<AdminLogin />} />
-
-        {/*  DASHBOARD PROTEGIDO (SEM HEADER/FOOTER) */}
         <Route
           path="/admin/dashboard"
           element={
@@ -50,18 +40,13 @@ function AppContent() {
             </PrivateRoute>
           }
         />
-
-        {/*  ROTA NÃO ENCONTRADA */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-
-      {/* FOOTER */}
       {!isDashboard && <Footer />}
     </>
   );
 }
 
-//  App principal (ativa o Router)
 function App() {
   return (
     <Router>

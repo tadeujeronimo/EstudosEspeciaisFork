@@ -1,19 +1,14 @@
-/* CONTAINER */
 .login-container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* fundo correto */
-  background: url('../assets/imagens/fundo.png') no-repeat center;
+  background: url('../../assets/imagens/fundo.png') no-repeat center;
   background-size: cover;
-
   color: #4a2c2a;
   padding: 20px;
 }
 
-/* FORM */
 .login-form {
   background: #ffffff;
   padding: 30px;
@@ -24,13 +19,11 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* TÍTULO */
 .login-form h2 {
   margin-bottom: 20px;
   color: #6f4e37;
 }
 
-/* INPUTS */
 .login-form input {
   width: 100%;
   padding: 12px;
@@ -40,7 +33,6 @@
   font-size: 1rem;
 }
 
-/* BOTÃO */
 .login-form button {
   width: 100%;
   padding: 12px;
@@ -58,14 +50,12 @@
   border: #A0522D;
 }
 
-/* ERRO */
 .erro {
   color: red;
   font-size: 14px;
   margin-top: 5px;
 }
 
-/* MOBILE */
 @media (max-width: 480px) {
   .login-form {
     padding: 20px;
