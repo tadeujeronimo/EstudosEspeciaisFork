@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs } from 'react-bootstrap';
+import { getMenuItemsByCategory } from '../../services/menuCategoriesService';
+
 import './Cardapio.css';
-import axios from 'axios';
 
 import coffe1 from '../../assets/imagens/cafe.png';
 import coffe2 from '../../assets/imagens/sobremesa.png';
@@ -11,6 +12,7 @@ import coffe5 from '../../assets/imagens/cha.png';
 
 function Cardapio() {
   const [currentImage, setCurrentImage] = useState(coffe1);
+  
   const [menuItems, setMenuItems] = useState({
     cafes: [],
     sobremesas: [],
@@ -20,26 +22,16 @@ function Cardapio() {
   });
 
   useEffect(() => {
-    axios
-      .get('http://localhost:4000/api/cardapio')
-      .then((response) => {
-        const categories = {
-          cafes: [],
-          sobremesas: [],
-          especiais: [],
-          bebidasGeladas: [],
-          chas: [],
-        };
-        response.data.forEach((item) => {
-          if (categories[item.categoria]) {
-            categories[item.categoria].push(item);
-          }
-        });
-        setMenuItems(categories);
-      })
-      .catch((error) => {
+    async function loadMenuItems() {
+      try {
+        const data = await getMenuItemsByCategory();
+        setMenuItems(data);
+      } catch (error) {
         console.error('Erro ao buscar os itens do menu:', error);
-      });
+      }
+    }
+
+    loadMenuItems();
   }, []);
 
   return (
@@ -82,7 +74,8 @@ function Cardapio() {
               <ul className="menu-list">
                 {menuItems.cafes.map((item) => (
                   <li key={item.id}>
-                    {item.nome} <span>R${item.preco.toFixed(2)}</span>
+                    {item.nome} 
+                    <span>R$ {(item.preco || 0).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
@@ -91,8 +84,8 @@ function Cardapio() {
               <ul className="menu-list">
                 {menuItems.sobremesas.map((item) => (
                   <li key={item.id}>
-                    {item.nome} <span>R${item.preco.toFixed(2)}</span>
-                  </li>
+                    {item.nome} 
+                    <span>R$ {(item.preco || 0).toFixed(2)}</span>                  </li>
                 ))}
               </ul>
             </Tab>
@@ -100,7 +93,8 @@ function Cardapio() {
               <ul className="menu-list">
                 {menuItems.especiais.map((item) => (
                   <li key={item.id}>
-                    {item.nome} <span>R${item.preco.toFixed(2)}</span>
+                    {item.nome} 
+                    <span>R$ {(item.preco || 0).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
@@ -109,7 +103,8 @@ function Cardapio() {
               <ul className="menu-list">
                 {menuItems.bebidasGeladas.map((item) => (
                   <li key={item.id}>
-                    {item.nome} <span>R${item.preco.toFixed(2)}</span>
+                    {item.nome} 
+                    <span>R$ {(item.preco || 0).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>
@@ -118,7 +113,8 @@ function Cardapio() {
               <ul className="menu-list">
                 {menuItems.chas.map((item) => (
                   <li key={item.id}>
-                    {item.nome} <span>R${item.preco.toFixed(2)}</span>
+                    {item.nome}
+                    <span>R$ {(item.preco || 0).toFixed(2)}</span>
                   </li>
                 ))}
               </ul>

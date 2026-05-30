@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginAdmin } from '../../services/authService';
+
 import './AdminLogin.css';
 
-export default function AdminLogin() {
+function AdminLogin() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -15,30 +17,14 @@ export default function AdminLogin() {
     setErro('');
 
     try {
-      const res = await fetch('http://localhost:4000/api/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          senha: senha,
-        }),
-      });
+      const data = await loginAdmin(email, senha);
 
-      const data = await res.json();
+      localStorage.setItem('admin', JSON.stringify(data.admin));
+      localStorage.setItem('auth', 'true');
 
-      if (res.ok) {
-        // salva dados do admin
-        localStorage.setItem('admin', JSON.stringify(data.admin));
-        localStorage.setItem('auth', 'true');
-
-        navigate('/admin/dashboard');
-      } else {
-        setErro(data.error || 'Erro no login');
-      }
+      navigate('/admin/dashboard');
     } catch (error) {
-      setErro('Erro ao conectar com o servidor');
+      setErro(error.message);
     }
   };
 
@@ -66,3 +52,5 @@ export default function AdminLogin() {
     </div>
   );
 }
+
+export default AdminLogin

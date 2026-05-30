@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import axios from 'axios';
+import { getMenuOptions } from '../../services/menuOptionsService';
+import { createOrder } from '../../services/orderService';
+
 import './Pedidos.css';
 
 function Pedidos() {
@@ -24,28 +26,16 @@ function Pedidos() {
   const [quantidadeAtual, setQuantidadeAtual] = useState(1);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:4000/api/cardapio')
-      .then((response) => {
-        const categorias = {
-          cafes: {},
-          sobremesas: {},
-          especiais: {},
-          bebidasGeladas: {},
-          chas: {},
-        };
-
-        response.data.forEach((item) => {
-          if (categorias[item.categoria]) {
-            categorias[item.categoria][item.nome] = item.preco;
-          }
-        });
-
-        setMenuItems(categorias);
-      })
-      .catch((error) => {
+    async function loadMenuItems() {
+      try {
+        const data = await getMenuOptions();
+        setMenuItems(data);
+      } catch (error) {
         console.error('Erro ao buscar itens do menu:', error);
-      });
+      }
+    }
+
+    loadMenuItems();
   }, []);
 
   const handleCategoriaClick = (categoria) => {
@@ -86,7 +76,7 @@ function Pedidos() {
     return itens.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e)  => {
     e.preventDefault();
 
     if (!pedido.formaPagamento || !pedido.tipoPedido) {
@@ -115,27 +105,26 @@ function Pedidos() {
       trocoPara: pedido.precisaTroco ? Number(pedido.trocoPara) || 0 : null,
     };
 
-    axios
-      .post('http://localhost:4000/api/pedidos', pedidoCorrigido)
-      .then(() => {
-        alert('Pedido enviado com sucesso!');
+    try {
+      await createOrder(pedidoCorrigido);
 
-        setPedido({
-          nomeCliente: '',
-          itens: [],
-          formaPagamento: '',
-          tipoPedido: '',
-          rua: '',
-          numero: '',
-          bairro: '',
-          precisaTroco: false,
-          trocoPara: '',
-          observacoes: '',
-        });
-      })
-      .catch((error) => {
-        console.error('Erro ao enviar pedido:', error);
+      alert('Pedido enviado com sucesso!');
+
+      setPedido({
+        nomeCliente: '',
+        itens: [],
+        formaPagamento: '',
+        tipoPedido: '',
+        rua: '',
+        numero: '',
+        bairro: '',
+        precisaTroco: false,
+        trocoPara: '',
+        observacoes: '',
       });
+    } catch (error) {
+      console.error('Erro ao enviar pedido:', error);
+    }
   };
 
   return (

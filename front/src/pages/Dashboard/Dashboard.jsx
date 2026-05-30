@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
+import { buscarPedidos, atualizarStatusPedido } from '../../services/dashboardService';
+import OrderCard from '../../components/OrderCard/OrderCard';
+
 import './Dashboard.css';
 
-export default function Dashboard() {
+function Dashboard() {
   const [pedidos, setPedidos] = useState([]);
 
   const carregarPedidos = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/dashboard');
-      const data = await res.json();
-
-      if (Array.isArray(data)) {
-        setPedidos(data);
-      } else {
-        setPedidos([]);
-      }
+      const data = await buscarPedidos();
+      setPedidos(data);
     } catch (error) {
       console.error('Erro ao buscar pedidos', error);
       setPedidos([]);
@@ -28,14 +25,7 @@ export default function Dashboard() {
 
   const atualizarStatus = async (id, novoStatus) => {
     try {
-      await fetch(`http://localhost:3000/api/dashboard/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status: novoStatus }),
-      });
-
+      await atualizarStatusPedido(id, novoStatus);
       carregarPedidos();
     } catch (error) {
       console.error('Erro ao atualizar status', error);
@@ -47,9 +37,7 @@ export default function Dashboard() {
   );
 
   const concluidos = pedidos.filter((p) => p.status === 'Concluído');
-
   const cancelados = pedidos.filter((p) => p.status === 'Cancelado');
-
   const hoje = new Date().toDateString();
 
   const pedidosHoje = pedidos.filter(
@@ -61,76 +49,8 @@ export default function Dashboard() {
     .reduce((acc, p) => acc + (p.precoTotal || 0), 0);
 
   const totalPedidos = pedidosHoje.length || 1;
-
   const porcentagemConcluidos = (concluidos.length / totalPedidos) * 100;
   const porcentagemCancelados = (cancelados.length / totalPedidos) * 100;
-
-  const renderCard = (pedido) => (
-    <div
-      className={`card ${pedido.status?.toLowerCase() || 'pendente'}`}
-      key={pedido.id}
-    >
-      <div className="card-header">
-        <h3>Pedido #{pedido.id}</h3>
-        <span className={`badge ${pedido.status?.toLowerCase()}`}>
-          {pedido.status || 'Pendente'}
-        </span>
-      </div>
-      <p>
-        <strong>Cliente:</strong> {pedido.nomeCliente}
-      </p>
-      <p>
-        <strong>Mesa:</strong> {pedido.numeroMesa}
-      </p>
-      <p>
-        <strong>Pagamento:</strong> {pedido.formaPagamento || 'Não informado'}
-      </p>
-      <p>
-        <strong>Tipo:</strong> {pedido.tipoPedido || 'Não informado'}
-      </p>
-      {pedido.tipoPedido === 'entrega' && (
-        <p>
-          <strong>Endereço:</strong> {pedido.rua}, {pedido.numero} -{' '}
-          {pedido.bairro}
-        </p>
-      )}
-      {pedido.formaPagamento === 'dinheiro' && pedido.precisaTroco && (
-        <p>
-          <strong>Troco para:</strong> R$ {pedido.trocoPara}
-        </p>
-      )}
-      {pedido.observacoes && (
-        <p>
-          <strong>Obs:</strong> {pedido.observacoes}
-        </p>
-      )}
-      <ul className="items">
-        {Array.isArray(pedido.itens) &&
-          pedido.itens.map((item, i) => (
-            <li key={i}>
-              {item.name}
-              <span>x{item.quantity}</span>
-            </li>
-          ))}
-      </ul>
-      <p className="total">
-        Total: <strong>R$ {pedido.precoTotal?.toFixed(2)}</strong>
-      </p>
-      {(pedido.status || 'Pendente') === 'Pendente' && (
-        <div className="actions">
-          <button onClick={() => atualizarStatus(pedido.id, 'Concluído')}>
-            Concluir
-          </button>
-          <button
-            className="cancel"
-            onClick={() => atualizarStatus(pedido.id, 'Cancelado')}
-          >
-            Cancelar
-          </button>
-        </div>
-      )}
-    </div>
-  );
 
   return (
     <div className="dashboard">
@@ -176,17 +96,43 @@ export default function Dashboard() {
       <div className="kanban">
         <div className="column">
           <h2>🕒 Pendentes</h2>
-          <div className="column-cards">{pendentes.map(renderCard)}</div>
+          <div className="column-cards">
+          {pendentes.map((pedido) => (
+            <OrderCard
+              key={pedido.id}
+              pedido={pedido}
+              atualizarStatus={atualizarStatus}
+            />
+          ))}
+        </div>
         </div>
         <div className="column">
           <h2>✅ Concluídos</h2>
-          <div className="column-cards">{concluidos.map(renderCard)}</div>
+          <div className="column-cards">
+            {pendentes.map((pedido) => (
+              <OrderCard
+                key={pedido.id}
+                pedido={pedido}
+                atualizarStatus={atualizarStatus}
+              />
+            ))}
+          </div>
         </div>
         <div className="column">
           <h2>❌ Cancelados</h2>
-          <div className="column-cards">{cancelados.map(renderCard)}</div>
+          <div className="column-cards">
+            {pendentes.map((pedido) => (
+              <OrderCard
+                key={pedido.id}
+                pedido={pedido}
+                atualizarStatus={atualizarStatus}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+export default Dashboard
