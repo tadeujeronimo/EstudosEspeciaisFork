@@ -1,0 +1,525 @@
+openapi: 3.0.3
+info:
+  title: Cafeteria Gourmet Backend API
+  version: 1.0.0
+  description: >
+    Especificacao OpenAPI do backend Express.
+    O contrato descreve apenas as rotas atualmente expostas em back/src/routes.
+servers:
+  - url: http://localhost:4000
+    description: Backend Express local
+  - url: http://localhost:3000
+    description: Frontend CRA local com proxy para /api em desenvolvimento
+tags:
+  - name: Cardapio
+  - name: Pedidos
+  - name: Admin
+  - name: Dashboard
+paths:
+  /api/cardapio:
+    get:
+      tags:
+        - Cardapio
+      summary: Lista todos os itens do cardapio
+      operationId: listCardapioItems
+      responses:
+        "200":
+          description: Itens do cardapio retornados com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CardapioItem"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - Cardapio
+      summary: Adiciona itens ao cardapio em lote por categoria
+      operationId: addCardapioItems
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CardapioBatchCreateRequest"
+            example:
+              menuItems:
+                cafes:
+                  Espresso: 6.5
+                  Cappuccino: 9.0
+                sobremesas:
+                  Brownie: 12.0
+      responses:
+        "201":
+          description: Itens adicionados com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+              example:
+                message: Itens adicionados com sucesso
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/cardapio/{id}:
+    put:
+      tags:
+        - Cardapio
+      summary: Atualiza um item do cardapio
+      operationId: updateCardapioItem
+      parameters:
+        - $ref: "#/components/parameters/IdPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CardapioUpdateRequest"
+            example:
+              nome: Cappuccino
+              preco: 9.5
+              categoria: cafes
+      responses:
+        "200":
+          description: Item atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardapioItem"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      tags:
+        - Cardapio
+      summary: Remove um item do cardapio
+      operationId: deleteCardapioItem
+      parameters:
+        - $ref: "#/components/parameters/IdPath"
+      responses:
+        "204":
+          description: Item removido sem corpo de resposta
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/pedidos:
+    get:
+      tags:
+        - Pedidos
+      summary: Lista pedidos em ordem decrescente de id
+      operationId: listPedidos
+      responses:
+        "200":
+          description: Pedidos retornados com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pedido"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - Pedidos
+      summary: Cria um pedido
+      operationId: createPedido
+      description: >
+        O backend calcula precoTotal a partir dos itens enviados e normaliza
+        campos de troco. nomeCliente e itens nao vazio sao obrigatorios.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PedidoCreateRequest"
+            example:
+              nomeCliente: Maria
+              itens:
+                - categoria: cafes
+                  nome: Espresso
+                  preco: 6.5
+                  quantidade: 2
+              formaPagamento: dinheiro
+              tipoPedido: entrega
+              rua: Rua A
+              numero: "123"
+              bairro: Centro
+              precisaTroco: true
+              trocoPara: 50
+              observacoes: Sem acucar
+      responses:
+        "201":
+          description: Pedido criado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pedido"
+        "400":
+          description: Dados obrigatorios ausentes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Preencha os dados obrigatorios
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/admin/login:
+    post:
+      tags:
+        - Admin
+      summary: Realiza login administrativo
+      operationId: adminLogin
+      description: >
+        O backend compara senha em texto claro com o registro de Administrador.
+        Nao ha emissao de token ou cookie de sessao.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoginRequest"
+            example:
+              email: admin@admin.com
+              senha: "123"
+      responses:
+        "200":
+          description: Login realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminLoginResponse"
+        "400":
+          description: Email ou senha ausentes
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                error: Email e senha sao obrigatorios
+        "401":
+          description: Administrador inexistente ou credenciais invalidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                adminNaoEncontrado:
+                  value:
+                    error: Administrador nao encontrado
+                credenciaisInvalidas:
+                  value:
+                    error: Credenciais invalidas
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/dashboard:
+    get:
+      tags:
+        - Dashboard
+      summary: Lista pedidos para o dashboard administrativo
+      operationId: listDashboardPedidos
+      description: Retorna pedidos ordenados por criadoEm em ordem decrescente.
+      responses:
+        "200":
+          description: Pedidos retornados com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pedido"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/dashboard/{id}:
+    put:
+      tags:
+        - Dashboard
+      summary: Atualiza o status de um pedido
+      operationId: updatePedidoStatus
+      description: >
+        O backend aceita o valor de status enviado sem validacao explicita.
+        A interface usa principalmente Pendente, Concluído e Cancelado.
+      parameters:
+        - $ref: "#/components/parameters/IdPath"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PedidoStatusUpdateRequest"
+            examples:
+              concluir:
+                value:
+                  status: Concluído
+              cancelar:
+                value:
+                  status: Cancelado
+      responses:
+        "200":
+          description: Pedido atualizado
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pedido"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  parameters:
+    IdPath:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+      description: Identificador numerico do recurso
+  responses:
+    InternalServerError:
+      description: Erro interno do servidor
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error: Erro no servidor
+  schemas:
+    CardapioItem:
+      type: object
+      required:
+        - id
+        - nome
+        - preco
+        - categoria
+        - criadoEm
+      properties:
+        id:
+          type: integer
+          example: 1
+        nome:
+          type: string
+          example: Espresso
+        preco:
+          type: number
+          format: double
+          example: 6.5
+        categoria:
+          type: string
+          example: cafes
+        criadoEm:
+          type: string
+          format: date-time
+    CardapioBatchCreateRequest:
+      type: object
+      required:
+        - menuItems
+      properties:
+        menuItems:
+          type: object
+          description: Objeto cujas chaves sao categorias e os valores sao mapas nome-preco.
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: number
+              format: double
+    CardapioUpdateRequest:
+      type: object
+      properties:
+        nome:
+          type: string
+        preco:
+          type: number
+          format: double
+        categoria:
+          type: string
+      example:
+        nome: Cappuccino
+        preco: 9.5
+        categoria: cafes
+    PedidoItem:
+      type: object
+      required:
+        - nome
+        - preco
+        - quantidade
+      properties:
+        categoria:
+          type: string
+          example: cafes
+        nome:
+          type: string
+          example: Espresso
+        preco:
+          type: number
+          format: double
+          example: 6.5
+        quantidade:
+          type: integer
+          minimum: 1
+          example: 2
+    PedidoCreateRequest:
+      type: object
+      required:
+        - nomeCliente
+        - itens
+      properties:
+        nomeCliente:
+          type: string
+          example: Maria
+        itens:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/PedidoItem"
+        formaPagamento:
+          type: string
+          nullable: true
+          example: dinheiro
+        tipoPedido:
+          type: string
+          nullable: true
+          example: entrega
+        rua:
+          type: string
+          nullable: true
+        numero:
+          type: string
+          nullable: true
+        bairro:
+          type: string
+          nullable: true
+        precisaTroco:
+          nullable: true
+          oneOf:
+            - type: boolean
+            - type: string
+              enum:
+                - "true"
+                - "false"
+          example: true
+        trocoPara:
+          type: number
+          format: double
+          nullable: true
+          example: 50
+        observacoes:
+          type: string
+          nullable: true
+    Pedido:
+      type: object
+      required:
+        - id
+        - nomeCliente
+        - itens
+        - precoTotal
+        - status
+        - criadoEm
+      properties:
+        id:
+          type: integer
+          example: 10
+        nomeCliente:
+          type: string
+          example: Maria
+        itens:
+          type: array
+          items:
+            $ref: "#/components/schemas/PedidoItem"
+        precoTotal:
+          type: number
+          format: double
+          example: 13
+        formaPagamento:
+          type: string
+          nullable: true
+          example: dinheiro
+        tipoPedido:
+          type: string
+          nullable: true
+          example: entrega
+        rua:
+          type: string
+          nullable: true
+        numero:
+          type: string
+          nullable: true
+        bairro:
+          type: string
+          nullable: true
+        precisaTroco:
+          type: boolean
+          nullable: true
+          example: true
+        trocoPara:
+          type: number
+          format: double
+          nullable: true
+          example: 50
+        observacoes:
+          type: string
+          nullable: true
+        status:
+          type: string
+          description: Valor padrao do banco e Pendente; a API nao valida enumeracao.
+          example: Pendente
+        criadoEm:
+          type: string
+          format: date-time
+    PedidoStatusUpdateRequest:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          example: Concluído
+    AdminLoginRequest:
+      type: object
+      required:
+        - email
+        - senha
+      properties:
+        email:
+          type: string
+          format: email
+          example: admin@admin.com
+        senha:
+          type: string
+          example: "123"
+    AdminSummary:
+      type: object
+      required:
+        - id
+        - email
+      properties:
+        id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          format: email
+          example: admin@admin.com
+    AdminLoginResponse:
+      type: object
+      required:
+        - message
+        - admin
+      properties:
+        message:
+          type: string
+          example: Login realizado com sucesso
+        admin:
+          $ref: "#/components/schemas/AdminSummary"
+    MessageResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
