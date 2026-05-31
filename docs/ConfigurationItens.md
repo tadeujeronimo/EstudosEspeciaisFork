@@ -131,3 +131,48 @@
 - **Commit ID:** 2d0124891bf4ccd8faacee7893c91ad3b5e50314
 - **Mudanças:** Cobertura inicial de renderização e validação básica da interface. Arquivos: `App.test.js`, `setupTests.js`.
 - **Data Release:** 07/04/2026
+
+## Item de Configuração: Documento de Arquitetura (ADD/SAD)
+
+- **ID:** IC-013
+- **Tipo:** Documentação
+- **Versão:** 1.0.0
+- **Repositório:** [GitHub](https://github.com/Lanna-Maria/EstudosEspeciais)
+- **Branch:** docs/project-specifications
+- **Commit ID:** ef5b85050276824000f29d2a25ec2e195a569694
+- **Mudanças:** Inclusão do Architectural Design Document (ADD), decisões arquiteturais, riscos e débitos técnicos. Arquivo: `docs/architecture/ADD-cafeteria-gourmet.md`.
+- **Data Release:** 30/05/2026
+
+## Item de Configuração: Especificação OpenAPI da API Backend
+
+- **ID:** IC-014
+- **Tipo:** Documentação
+- **Versão:** 1.0.0
+- **Repositório:** [GitHub](https://github.com/Lanna-Maria/EstudosEspeciais)
+- **Branch:** docs/project-specifications
+- **Commit ID:** 622c017d97167c46fa4ef1731a51f276c2824828
+- **Mudanças:** Inclusão da especificação OpenAPI 3.0 da API backend, documentando os endpoints Express expostos para cardápio, pedidos, login administrativo e dashboard. Arquivo: `docs/api-spec.yaml`.
+- **Data Release:** 30/05/2026
+
+## Item de Configuração: Lista de Itens de Configuração
+
+- **ID:** IC-015
+- **Tipo:** Documentação
+- **Versão:** 1.0.0
+- **Repositório:** [GitHub](https://github.com/Lanna-Maria/EstudosEspeciais)
+- **Branch:** docs/project-specifications
+- **Commit ID:** A definir após commit de atualização
+- **Mudanças:** Inclusão da própria lista detalhada de itens de configuração como documento controlado e versionado. Arquivo: `docs/ConfigurationItens.md`.
+- **Data Release:** 31/05/2026
+
+## Item de Configuração: Catálogo de ICs e Repositórios
+
+- **ID:** IC-016
+- **Tipo:** Documentação
+- **Versão:** 1.0.0
+- **Repositório:** [GitHub](https://github.com/Lanna-Maria/EstudosEspeciais)
+- **Branch:** docs/project-specifications
+- **Commit ID:** A definir após commit de atualização
+- **Mudanças:** Inclusão do catálogo resumido de ICs e repositórios como documento controlado e versionado. Arquivo: `docs/Catalogo_ICs_Repositorios.md`.
+- **Data Release:** 31/05/2026
+
