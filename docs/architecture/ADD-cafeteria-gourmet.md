@@ -3,7 +3,6 @@
 **Projeto:** Estudos Especiais - Cafe Gourmet  
 **Tipo:** Architectural Design Document / Software Architecture Document  
 **Data:** 2026-05-31  
-**Escopo C4:** nivel 1 (System Context), nivel 2 (Containers) e nivel 3 (Components)
 
 ## 1. Introducao
 
@@ -93,7 +92,7 @@ flowchart LR
 
 ## 4. Componentes
 
-### Backend - C4 nivel 3
+### Backend
 
 ```mermaid
 flowchart TD
@@ -123,7 +122,7 @@ flowchart TD
 | Controllers | Processar requisicoes, aplicar validacoes basicas, chamar Prisma e montar respostas HTTP | `req`, `res`, Prisma Client |
 | Prisma schema | Definir os modelos persistidos | `Cardapio`, `Pedido`, `Administrador` |
 
-### Frontend - C4 nivel 3
+### Frontend
 
 ```mermaid
 flowchart TD
