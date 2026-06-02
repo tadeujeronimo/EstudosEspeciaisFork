@@ -29,11 +29,10 @@ export default function AdminLogin() {
       const data = await res.json();
 
       if (res.ok) {
-        // salva dados do admin
         localStorage.setItem('admin', JSON.stringify(data.admin));
 
-        // marca como logado
-        localStorage.setItem('auth', 'true');
+        // salva o JWT
+        localStorage.setItem('auth', data.token);
 
         navigate('/admin/dashboard');
       } else {

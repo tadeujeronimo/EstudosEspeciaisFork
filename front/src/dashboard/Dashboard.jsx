@@ -3,10 +3,16 @@ import './Dashboard.css';
 
 export default function Dashboard() {
   const [pedidos, setPedidos] = useState([]);
+  const token = localStorage.getItem('auth');
 
   const carregarPedidos = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/dashboard');
+      const res = await fetch('http://localhost:4000/api/dashboard', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await res.json();
 
       if (Array.isArray(data)) {
@@ -22,18 +28,23 @@ export default function Dashboard() {
 
   useEffect(() => {
     carregarPedidos();
+
     const interval = setInterval(carregarPedidos, 5000);
+
     return () => clearInterval(interval);
   }, []);
 
   const atualizarStatus = async (id, novoStatus) => {
     try {
-      await fetch(`http://localhost:3000/api/dashboard/${id}`, {
+      await fetch(`http://localhost:4000/api/dashboard/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ status: novoStatus }),
+        body: JSON.stringify({
+          status: novoStatus,
+        }),
       });
 
       carregarPedidos();

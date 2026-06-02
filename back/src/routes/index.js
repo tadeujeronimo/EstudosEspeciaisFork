@@ -1,4 +1,5 @@
 const express = require('express');
+const auth = require('../middlewares/auth');
 
 const cardapioRoutes = require('./cardapioRoutes');
 const pedidoRoutes = require('./pedidosRoutes');
@@ -7,12 +8,12 @@ const dashboardRoutes = require('./dashboardRoutes');
 
 const router = express.Router();
 
-// rotas principais
-router.use('/cardapio', cardapioRoutes);
+// Públicas
+router.use('/admin', adminRoutes);
 router.use('/pedidos', pedidoRoutes);
 
-// admin e dashboard
-router.use('/admin', adminRoutes);
-router.use('/dashboard', dashboardRoutes);
+// Protegidas
+router.use('/dashboard', auth, dashboardRoutes);
+router.use('/cardapio', cardapioRoutes);
 
 module.exports = router;
