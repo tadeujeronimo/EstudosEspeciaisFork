@@ -10,7 +10,7 @@
 - **Nome do Projeto:** Cafeteria Gourmet
 - **Responsável pela Gerência de Configuração (GC):** Ynã Ponte
 - **Data de Criação:** 07/04/2026
-- **Última Atualização:** 13/04/2026
+- **Última Atualização:** 31/05/2026
 
 ---
 
@@ -30,6 +30,10 @@
 | IC-010 | Núcleo da Interface | Código | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
 | IC-011 | Telas Funcionais (Interface de Usuário) | Código | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
 | IC-012 | Testes Automatizados | Teste | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
+| IC-013 | Documento de Arquitetura (ADD/SAD) | Documentação | [GitHub/docs/architecture/ADD.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/architecture/ADD.md) | `v1.0.0` | Ynã Ponte | Ativo |
+| IC-014 | Especificação OpenAPI da API Backend | Documentação | [GitHub/docs/openapi.yaml](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/openapi.yaml) | `v1.0.0` | Ynã Ponte | Ativo |
+| IC-015 | Lista de Itens de Configuração | Documentação | [GitHub/docs/ConfigurationItens.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/docs/project-specifications/docs/ConfigurationItens.md) | `v1.2.0` | Ynã Ponte | Ativo |
+| IC-016 | Catálogo de ICs e Repositórios | Documentação | [GitHub/docs/Catalogo_ICs_Repositorios.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/docs/project-specifications/docs/Catalogo_ICs_Repositorios.md) | `v1.2.0` | Ynã Ponte | Ativo |
 
 ---
 
@@ -73,3 +77,5 @@ git push origin --tags
 | 13/04/2026 | v1.0.0 | Registro dos IC-004, IC-005 e IC-006 na documentação (correção) | Lanna Mesquita |
 | 13/04/2026 | v1.0.0 | Registro dos IC-007, IC-008 e IC-009 na documentação | Ynã Ponte |
 | 14/04/2026 | v1.0.0 | Registro dos IC-010, IC-011 e IC-012 na documentação | Alanna Paiva|
+| 30/05/2026 | v1.0.0 | Registro dos IC-013 e IC-014: ADD/SAD e Especificação OpenAPI | Ynã Ponte |
+| 31/05/2026 | v1.0.0 | Registro dos IC-015 e IC-016: documentos de controle de configuração | Ynã Ponte |

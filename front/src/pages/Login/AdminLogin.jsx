@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginAdmin } from '../../services/authService';
+
 import './AdminLogin.css';
 
-export default function AdminLogin() {
+function AdminLogin() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -15,18 +17,10 @@ export default function AdminLogin() {
     setErro('');
 
     try {
-      const res = await fetch('http://localhost:4000/api/admin/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email,
-          senha: senha,
-        }),
-      });
+      const data = await loginAdmin(email, senha);
 
-      const data = await res.json();
+      localStorage.setItem('admin', JSON.stringify(data.admin));
+      localStorage.setItem('auth', 'true');
 
       if (res.ok) {
         localStorage.setItem('admin', JSON.stringify(data.admin));
@@ -38,8 +32,9 @@ export default function AdminLogin() {
       } else {
         setErro(data.error || 'Erro no login');
       }
+      navigate('/admin/dashboard');
     } catch (error) {
-      setErro('Erro ao conectar com o servidor');
+      setErro(error.message);
     }
   };
 
@@ -47,7 +42,6 @@ export default function AdminLogin() {
     <div className="login-container">
       <form className="login-form" onSubmit={handleLogin}>
         <h2>Painel Administrativo</h2>
-
         <input
           type="email"
           placeholder="Email"
@@ -55,7 +49,6 @@ export default function AdminLogin() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
         <input
           type="password"
           placeholder="Senha"
@@ -63,11 +56,11 @@ export default function AdminLogin() {
           onChange={(e) => setSenha(e.target.value)}
           required
         />
-
         {erro && <p className="erro">{erro}</p>}
-
         <button type="submit">Entrar</button>
       </form>
     </div>
   );
 }
+
+export default AdminLogin;
