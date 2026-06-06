@@ -1,15 +1,15 @@
 const { PrismaClient } = require('@prisma/client');
+const jwt = require('jsonwebtoken');
+
 const prisma = new PrismaClient();
 
 const adminLogin = async (req, res) => {
   const { email, senha } = req.body;
 
-  // Logs para debug (ver o que está chegando na requisição)
   console.log('BODY:', req.body);
   console.log('EMAIL DIGITADO:', `[${email}]`);
   console.log('SENHA DIGITADA:', `[${senha}]`);
 
-  // Validação: verifica se email e senha foram enviados
   if (!email || !senha) {
     return res.status(400).json({
       error: 'Email e senha são obrigatórios',
@@ -17,10 +17,8 @@ const adminLogin = async (req, res) => {
   }
 
   try {
-    // Busca o administrador no banco pelo email
     const admin = await prisma.administrador.findUnique({
       where: {
-        // Remove espaços e garante que o email esteja em minúsculo
         email: email.trim().toLowerCase(),
       },
     });
@@ -35,16 +33,26 @@ const adminLogin = async (req, res) => {
 
     console.log('SENHA DO BANCO:', `[${admin.senha}]`);
 
-    // Compara a senha digitada com a senha do banco
-    // trim() remove espaços extras antes/depois
     if (admin.senha.trim() !== senha.trim()) {
       return res.status(401).json({
         error: 'Credenciais inválidas',
       });
     }
 
-    return res.json({
+    const token = jwt.sign(
+      {
+        id: admin.id,
+        email: admin.email,
+      },
+      process.env.JWT_SECRET || 'segredo123',
+      {
+        expiresIn: '1d',
+      },
+    );
+
+    return res.status(200).json({
       message: 'Login realizado com sucesso',
+      token,
       admin: {
         id: admin.id,
         email: admin.email,

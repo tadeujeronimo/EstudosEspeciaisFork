@@ -12,6 +12,7 @@ model Cardapio {
   nome        String
   preco       Float
   categoria   String
+  imagem    String?
   criadoEm    DateTime @default(now())
 }
 

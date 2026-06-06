@@ -1,4 +1,6 @@
 const express = require('express');
+const auth = require('../middlewares/auth');
+
 const {
   getDashboardPedidos,
   updatePedidoStatus,
@@ -6,7 +8,8 @@ const {
 
 const router = express.Router();
 
-router.get('/', getDashboardPedidos);
-router.put('/:id', updatePedidoStatus);
+router.get('/', auth, getDashboardPedidos);
+
+router.put('/:id', auth, updatePedidoStatus);
 
 module.exports = router;

@@ -22,6 +22,16 @@ function AdminLogin() {
       localStorage.setItem('admin', JSON.stringify(data.admin));
       localStorage.setItem('auth', 'true');
 
+      if (res.ok) {
+        localStorage.setItem('admin', JSON.stringify(data.admin));
+
+        // salva o JWT
+        localStorage.setItem('auth', data.token);
+
+        navigate('/admin/dashboard');
+      } else {
+        setErro(data.error || 'Erro no login');
+      }
       navigate('/admin/dashboard');
     } catch (error) {
       setErro(error.message);
@@ -53,4 +63,4 @@ function AdminLogin() {
   );
 }
 
-export default AdminLogin
+export default AdminLogin;
