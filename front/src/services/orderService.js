@@ -1,8 +1,9 @@
 import axios from 'axios';
+import { API_BASE } from './api';
 
 export async function createOrder(orderData) {
   const response = await axios.post(
-    'http://localhost:4000/api/pedidos',
+    `${API_BASE}/api/pedidos`,
     orderData
   );
 
