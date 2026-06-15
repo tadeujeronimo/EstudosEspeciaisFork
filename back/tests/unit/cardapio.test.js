@@ -6,7 +6,7 @@ jest.mock('@prisma/client', () => ({
 
 const {
   getAllMenuItems,
-  addMenuItems,
+  addMenuItem,
   updateMenuItem,
   deleteMenuItem,
 } = require('../../src/controllers/cardapioController');
@@ -24,28 +24,23 @@ describe('cardapioController', () => {
     expect(res.json).toHaveBeenCalledWith([{ id: 1, nome: 'Café' }]);
   });
 
-  test('adiciona itens ao cardápio', async () => {
-    mockPrisma.cardapio.create.mockResolvedValue({});
+  test('adiciona item ao cardápio', async () => {
+    const novoItem = { id: 1, nome: 'Café', preco: 4, categoria: 'cafes', imagem: null };
+    mockPrisma.cardapio.create.mockResolvedValue(novoItem);
 
     const req = {
-      body: {
-        menuItems: {
-          bebidas: {
-            'Suco de laranja': 8,
-            Café: 4,
-          },
-        },
-      },
+      body: { nome: 'Café', preco: '4', categoria: 'cafes' },
+      file: null,
     };
     const res = createRes();
 
-    await addMenuItems(req, res);
+    await addMenuItem(req, res);
 
-    expect(mockPrisma.cardapio.create).toHaveBeenCalledTimes(2);
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({
-      message: 'Itens adicionados com sucesso',
+    expect(mockPrisma.cardapio.create).toHaveBeenCalledWith({
+      data: { nome: 'Café', preco: 4, categoria: 'cafes', imagem: null },
     });
+    expect(res.status).toHaveBeenCalledWith(201);
+    expect(res.json).toHaveBeenCalledWith(novoItem);
   });
 
   test('atualiza item do cardápio', async () => {
@@ -63,6 +58,7 @@ describe('cardapioController', () => {
       where: { id: 2 },
       data: { nome: 'Café', preco: 6, categoria: 'bebidas' },
     });
+
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
@@ -77,7 +73,7 @@ describe('cardapioController', () => {
     expect(mockPrisma.cardapio.delete).toHaveBeenCalledWith({
       where: { id: 5 },
     });
-    expect(res.status).toHaveBeenCalledWith(204);
-    expect(res.end).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Item removido com sucesso' });
   });
 });

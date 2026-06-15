@@ -4,6 +4,14 @@ jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn(() => mockPrisma),
 }));
 
+jest.mock('bcrypt', () => ({
+  compare: jest.fn().mockResolvedValue(true),
+}));
+
+jest.mock('jsonwebtoken', () => ({
+  sign: jest.fn().mockReturnValue('fake-token'),
+}));
+
 const { adminLogin } = require('../../src/controllers/adminController');
 
 describe('adminController', () => {
@@ -23,7 +31,7 @@ describe('adminController', () => {
     mockPrisma.administrador.findUnique.mockResolvedValue({
       id: 1,
       email: 'admin@teste.com',
-      senha: '123456',
+      senha: '$2b$10$hashedpassword',
     });
 
     const req = {
@@ -41,6 +49,7 @@ describe('adminController', () => {
     });
     expect(res.json).toHaveBeenCalledWith({
       message: 'Login realizado com sucesso',
+      token: 'fake-token',
       admin: {
         id: 1,
         email: 'admin@teste.com',
