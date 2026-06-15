@@ -1,17 +1,14 @@
-/* RESET BÁSICO */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* FUNDO GERAL */
 body {
   font-family: 'Merriweather', serif;
-  background: url('../assets/imagens/fundo.png') center/cover no-repeat;
+  background: url('../../assets/imagens/fundo.png') center/cover no-repeat;
 }
 
-/* CONTAINER PRINCIPAL */
 .menu-container {
    background: linear-gradient(
     180deg,
@@ -28,7 +25,6 @@ body {
   backdrop-filter: blur(6px);
 }
 
-/* HEADER */
 .menu-header {
   text-align: center;
   margin-bottom: 20px;
@@ -47,7 +43,6 @@ body {
   color: #d9a441;
 }
 
-/* CONTEÚDO */
 .menu-content {
   display: flex;
   justify-content: center;
@@ -56,7 +51,6 @@ body {
   gap: 10px;
 }
 
-/* IMAGEM */
 .menu-image {
   width: 100%;
   max-width: 300px;
@@ -76,7 +70,6 @@ body {
   transform: scale(1.03);
 }
 
-/* TABS */
 .menu-tabs {
   width: 100%;
 }
@@ -111,7 +104,6 @@ body {
   color: #2c2c2c;
 }
 
-/* LISTA DE PRODUTOS */
 ul.menu-list {
   list-style: none;
   padding: 0;
@@ -119,7 +111,6 @@ ul.menu-list {
   font-size: 1rem;
 }
 
-/* ITEM */
 ul.menu-list li {
   display: flex;
   justify-content: space-between;
@@ -134,23 +125,18 @@ ul.menu-list li:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* NOME */
 ul.menu-list li span:first-child {
   font-weight: 500;
 }
 
-/* PREÇO */
 ul.menu-list li span:last-child {
   font-weight: bold;
   color: #f5a623;
 }
 
-/* ========================= */
-/* 📱 RESPONSIVO (CORRIGIDO) */
-/* ========================= */
+
 @media (max-width: 768px) {
 
-  /* REMOVE aquele efeito de "coluna no meio" */
   body {
     background: #2c2c2c;
   }
@@ -171,7 +157,6 @@ ul.menu-list li span:last-child {
     font-size: 0.95rem;
   }
 
-  /* IMAGEM MENOR (EVITA LAYOUT ESTICADO) */
   .menu-image {
     max-width: 220px;
   }

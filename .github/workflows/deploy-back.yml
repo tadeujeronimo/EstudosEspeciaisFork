@@ -1,0 +1,65 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+
+# Garante que só um deploy roda por vez
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Test Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: back
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: back/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test -- --passWithNoTests
+
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    needs: test # só faz deploy se os testes passarem
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: back/package-lock.json
+
+      - name: Deploy to Vercel (action)
+        uses: amondnet/vercel-action@v42
+        id: vercel_deploy
+        with:
+          github-token: ${{ github.token }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_BACK }}
+          vercel-build: true
+          target: production
+          github-deployment-environment: production
+          github-deployment: true

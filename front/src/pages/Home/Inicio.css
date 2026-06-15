@@ -1,6 +1,6 @@
 .inicio {
   position: relative;
-  background: url('../assets/imagens/inicio.png') no-repeat center;
+  background: url('../../assets/imagens/inicio.png') no-repeat center;
   background-size: cover;
   color: #fff;
   height: 100vh ;  
@@ -41,10 +41,9 @@ p{
   font-family: 'Georgia', serif;
 }
 
-/* Responsividade*/
 @media (max-width: 768px){
   .inicio {
-height: 100vh; /* Para ocupar toda a tela*/
+height: 100vh; 
   }
   h2{
     font-size: 2rem;

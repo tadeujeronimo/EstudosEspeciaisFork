@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import axios from 'axios';
+import { getMenuOptions } from '../../services/menuOptionsService';
+import { createOrder } from '../../services/orderService';
+
 import './Pedidos.css';
 
 function Pedidos() {
@@ -23,30 +25,17 @@ function Pedidos() {
   const [itemAtual, setItemAtual] = useState('');
   const [quantidadeAtual, setQuantidadeAtual] = useState(1);
 
-  //  Buscar cardápio
   useEffect(() => {
-    axios
-      .get('http://localhost:4000/api/cardapio')
-      .then((response) => {
-        const categorias = {
-          cafes: {},
-          sobremesas: {},
-          especiais: {},
-          bebidasGeladas: {},
-          chas: {},
-        };
-
-        response.data.forEach((item) => {
-          if (categorias[item.categoria]) {
-            categorias[item.categoria][item.nome] = item.preco;
-          }
-        });
-
-        setMenuItems(categorias);
-      })
-      .catch((error) => {
+    async function loadMenuItems() {
+      try {
+        const data = await getMenuOptions();
+        setMenuItems(data);
+      } catch (error) {
         console.error('Erro ao buscar itens do menu:', error);
-      });
+      }
+    }
+
+    loadMenuItems();
   }, []);
 
   const handleCategoriaClick = (categoria) => {
@@ -87,7 +76,7 @@ function Pedidos() {
     return itens.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e)  => {
     e.preventDefault();
 
     if (!pedido.formaPagamento || !pedido.tipoPedido) {
@@ -111,33 +100,31 @@ function Pedidos() {
       }
     }
 
-    //  CORREÇÃO DO TROCO
     const pedidoCorrigido = {
       ...pedido,
       trocoPara: pedido.precisaTroco ? Number(pedido.trocoPara) || 0 : null,
     };
 
-    axios
-      .post('http://localhost:4000/api/pedidos', pedidoCorrigido)
-      .then(() => {
-        alert('Pedido enviado com sucesso!');
+    try {
+      await createOrder(pedidoCorrigido);
 
-        setPedido({
-          nomeCliente: '',
-          itens: [],
-          formaPagamento: '',
-          tipoPedido: '',
-          rua: '',
-          numero: '',
-          bairro: '',
-          precisaTroco: false,
-          trocoPara: '',
-          observacoes: '',
-        });
-      })
-      .catch((error) => {
-        console.error('Erro ao enviar pedido:', error);
+      alert('Pedido enviado com sucesso!');
+
+      setPedido({
+        nomeCliente: '',
+        itens: [],
+        formaPagamento: '',
+        tipoPedido: '',
+        rua: '',
+        numero: '',
+        bairro: '',
+        precisaTroco: false,
+        trocoPara: '',
+        observacoes: '',
       });
+    } catch (error) {
+      console.error('Erro ao enviar pedido:', error);
+    }
   };
 
   return (
@@ -145,7 +132,6 @@ function Pedidos() {
       <h2>Faça seu pedido</h2>
 
       <form onSubmit={handleSubmit}>
-        {/* Nome */}
         <div className="form-group">
           <label>Nome:</label>
           <input
@@ -157,8 +143,6 @@ function Pedidos() {
             required
           />
         </div>
-
-        {/* Pagamento */}
         <div className="form-group">
           <label>Forma de Pagamento:</label>
           <select
@@ -175,8 +159,6 @@ function Pedidos() {
             <option value="credito">Crédito</option>
           </select>
         </div>
-
-        {/* Troco */}
         {pedido.formaPagamento === 'dinheiro' && (
           <>
             <div className="form-group">
@@ -196,7 +178,6 @@ function Pedidos() {
                 <option value="true">Sim</option>
               </select>
             </div>
-
             {pedido.precisaTroco && (
               <div className="form-group">
                 <label>Troco para quanto?</label>
@@ -215,8 +196,6 @@ function Pedidos() {
             )}
           </>
         )}
-
-        {/* Tipo */}
         <div className="form-group">
           <label>Tipo de Pedido:</label>
           <select
@@ -231,8 +210,6 @@ function Pedidos() {
             <option value="entrega">Entrega</option>
           </select>
         </div>
-
-        {/* Endereço */}
         {pedido.tipoPedido === 'entrega' && (
           <>
             <div className="form-group">
@@ -243,7 +220,6 @@ function Pedidos() {
                 onChange={(e) => setPedido({ ...pedido, rua: e.target.value })}
               />
             </div>
-
             <div className="form-group">
               <label>Número:</label>
               <input
@@ -254,7 +230,6 @@ function Pedidos() {
                 }
               />
             </div>
-
             <div className="form-group">
               <label>Bairro:</label>
               <input
@@ -267,8 +242,6 @@ function Pedidos() {
             </div>
           </>
         )}
-
-        {/* Observações */}
         <div className="form-group">
           <label>Observações:</label>
           <textarea
@@ -278,8 +251,6 @@ function Pedidos() {
             }
           />
         </div>
-
-        {/* CARDÁPIO */}
         <div className="menu-category-list">
           {Object.keys(menuItems).map((categoria) => (
             <Button
@@ -290,11 +261,8 @@ function Pedidos() {
             </Button>
           ))}
         </div>
-
-        {/* ITENS */}
         <div className="order-items">
           <h3>Seu Pedido:</h3>
-
           {pedido.itens.length === 0 ? (
             <p>Nenhum item adicionado</p>
           ) : (
@@ -319,18 +287,13 @@ function Pedidos() {
             </ul>
           )}
         </div>
-
         <h3>Total: R$ {calcularTotal(pedido.itens).toFixed(2)}</h3>
-
         <button type="submit">Enviar Pedido</button>
       </form>
-
-      {/* MODAL */}
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Adicionar item</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <select
             value={itemAtual}
@@ -343,7 +306,6 @@ function Pedidos() {
               </option>
             ))}
           </select>
-
           <input
             type="number"
             value={quantidadeAtual}
@@ -351,7 +313,6 @@ function Pedidos() {
             min="1"
           />
         </Modal.Body>
-
         <Modal.Footer className="meu-footer-modal">
           <Button onClick={() => setShowModal(false)}>Cancelar</Button>
           <Button onClick={handleAdicionarItem}>Adicionar</Button>
