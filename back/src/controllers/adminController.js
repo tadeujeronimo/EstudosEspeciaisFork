@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const prisma = new PrismaClient();
 
@@ -31,9 +32,11 @@ const adminLogin = async (req, res) => {
       });
     }
 
-    console.log('SENHA DO BANCO:', `[${admin.senha}]`);
+    console.log('SENHA CRIPTOGRAFADA DO BANCO:', `[${admin.senha}]`);
 
-    if (admin.senha.trim() !== senha.trim()) {
+    const senhaValida = await bcrypt.compare(senha.trim(), admin.senha);
+
+    if (!senhaValida) {
       return res.status(401).json({
         error: 'Credenciais inválidas',
       });
