@@ -3,7 +3,7 @@
 - **Projeto:** CG - Cafeteria Gourmet
 - **Versão:** 1.0.0
 - **Data de Criação:** 09/06/2026
-- **Última Atualização:** 09/06/2026
+- **Última Atualização:** 14/06/2026
 
 ---
 
@@ -12,6 +12,7 @@
 | Data | Versão | Descrição | Responsável(eis) |
 |---|---|---|---|
 | 09/06/2026 | 1.0.0 | Elaboração inicial do documento de CI/CD | Alanna Paiva, Lanna Mesquita, Tadeu Jerônimo, Ynã Ponte |
+| 14/06/2026 | 1.0.1 | Atualiza parâmetros de deploy da Vercel | Tadeu Jerônimo |
 
 ---
 
@@ -173,7 +174,8 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_BACK }}
           vercel-build: true
-          vercel-args: --prod
+          target: production
+          github-deployment-environment: production
           github-deployment: true
 ```
 
@@ -236,7 +238,8 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FRONT }}
           vercel-build: true
-          vercel-args: --prod
+          target: production
+          github-deployment-environment: production
           github-deployment: true
 ```
 

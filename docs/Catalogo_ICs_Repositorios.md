@@ -10,7 +10,7 @@
 - **Nome do Projeto:** Cafeteria Gourmet
 - **Responsável pela Gerência de Configuração (GC):** Ynã Ponte
 - **Data de Criação:** 07/04/2026
-- **Última Atualização:** 09/06/2026
+- **Última Atualização:** 14/06/2026
 
 ---
 
@@ -32,10 +32,10 @@
 | IC-012 | Testes Automatizados | Teste | [GitHub/front/src](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/front/src) | `v1.0.0` | Alanna Paiva | Ativo |
 | IC-013 | Documento de Arquitetura (ADD/SAD) | Documentação | [GitHub/docs/architecture/ADD-cafeteria-gourmet.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/architecture/ADD-cafeteria-gourmet.md) | `v1.0.0` | Ynã Ponte | Ativo |
 | IC-014 | Especificação OpenAPI da API Backend | Documentação | [GitHub/docs/openapi.yaml](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/openapi.yaml) | `v1.0.0` | Ynã Ponte | Ativo |
-| IC-015 | Lista de Itens de Configuração | Documentação | [GitHub/docs/ConfigurationItens.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/ConfigurationItens.md) | `v1.2.0` | Ynã Ponte | Ativo |
-| IC-016 | Catálogo de ICs e Repositórios | Documentação | [GitHub/docs/Catalogo_ICs_Repositorios.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Catalogo_ICs_Repositorios.md) | `v1.2.0` | Ynã Ponte | Ativo |
+| IC-015 | Lista de Itens de Configuração | Documentação | [GitHub/docs/ConfigurationItens.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/ConfigurationItens.md) | `v1.3.0` | Ynã Ponte | Ativo |
+| IC-016 | Catálogo de ICs e Repositórios | Documentação | [GitHub/docs/Catalogo_ICs_Repositorios.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Catalogo_ICs_Repositorios.md) | `v1.3.0` | Ynã Ponte | Ativo |
 | IC-017 | Documento de Requisitos | Documentação | [GitHub/docs/Requisitos.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Requisitos.md) | `v1.0.0` | Tadeu Jerônimo | Ativo |
-| IC-018 | Documentação do Processo de CI/CD | Documentação | [GitHub/docs/Requisitos.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Documentacao_do_Processo_de_CI-CD.md) | `v1.0.0` | Tadeu Jerônimo | Ativo |
+| IC-018 | Documentação do Processo de CI/CD | Documentação | [GitHub/docs/Documentacao_do_Processo_de_CI-CD.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Documentacao_do_Processo_de_CI-CD.md) | `v1.0.1` | Tadeu Jerônimo | Ativo |
 
 ---
 
@@ -83,3 +83,4 @@ git push origin --tags
 | 31/05/2026 | v1.0.0 | Registro dos IC-015 e IC-016: documentos de controle de configuração | Ynã Ponte |
 | 01/06/2026 | v1.0.0 | Registro do IC-017: documento de requisitos funcionais e não funcionais | Tadeu Jerônimo |
 | 09/06/2026 | v1.0.0 | Registro do IC-018: documentação do processo de CI/CD | Tadeu Jerônimo |
+| 14/06/2026 | v1.0.0 | Atualização dos IC-015, IC-016 e IC-018 | Tadeu Jerônimo |

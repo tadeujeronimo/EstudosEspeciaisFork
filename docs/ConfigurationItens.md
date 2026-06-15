@@ -183,7 +183,7 @@
 - **Versão:** 1.0.0
 - **Repositório:** [GitHub/docs/Requisitos.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Requisitos.md)
 - **Branch:** docs/project-specifications
-- **Commit ID:** A definir após commit de atualização
+- **Commit ID:** 07098ba737642e733b67a6f9fb23814f1ab7be1a
 - **Mudanças:** Inclusão do documento de requisitos funcionais e não funcionais. Arquivo: `docs/Requisitos.md`.
 - **Data Release:** 01/06/2026
 
@@ -194,6 +194,6 @@
 - **Versão:** 1.0.0
 - **Repositório:** [GitHub/docs/Documentacao_do_Processo_de_CI-CD.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/Documentacao_do_Processo_de_CI-CD.md)
 - **Branch:** docs/project-specifications
-- **Commit ID:** A definir após commit de atualização
-- **Mudanças:** Inclusão da documentação do processo de CI/CD. Arquivo: `docs/Documentacao_CI_CD.md`.
+- **Commit ID:** 336d944f4dd52ef4cac125b484045915396d8462
+- **Mudanças:** Inclusão da documentação do processo de CI/CD. Arquivo: `docs/Documentacao_do_Processo_de_CI_CD.md`.
 - **Data Release:** 09/06/2026
