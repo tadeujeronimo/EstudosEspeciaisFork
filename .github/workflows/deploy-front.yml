@@ -63,5 +63,6 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FRONT }}
           vercel-build: true
-          vercel-args: --prod
+          target: production
+          github-deployment-environment: production
           github-deployment: true
