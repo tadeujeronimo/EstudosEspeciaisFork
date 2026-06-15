@@ -1,0 +1,452 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Café Gourmet API",
+    "description": "Documentação da API da Cafeteria",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4000/api",
+      "description": "Development Server"
+    },
+    {
+      "url": "https://cafe-gourmet-back.vercel.app/api",
+      "description": "Production Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Cardápio",
+      "description": "Endpoints do cardápio"
+    },
+    {
+      "name": "Pedidos",
+      "description": "Endpoints de pedidos"
+    },
+    {
+      "name": "Admin",
+      "description": "Endpoints administrativos"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "CardapioItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nome": {
+            "type": "string",
+            "example": "Cappuccino"
+          },
+          "categoria": {
+            "type": "string",
+            "enum": ["cafes", "sobremesas", "especiais", "bebidasGeladas", "chas"],
+            "example": "cafes"
+          },
+          "preco": {
+            "type": "number",
+            "format": "float",
+            "example": 8.50
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-04-11T10:30:00Z"
+          }
+        }
+      },
+      "Pedido": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "nomeCliente": {
+            "type": "string",
+            "example": "João Silva"
+          },
+          "itens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "categoria": {
+                  "type": "string",
+                  "example": "cafes"
+                },
+                "nome": {
+                  "type": "string",
+                  "example": "Espresso"
+                },
+                "preco": {
+                  "type": "number",
+                  "example": 4.00
+                },
+                "quantidade": {
+                  "type": "integer",
+                  "example": 2
+                }
+              }
+            }
+          },
+          "formaPagamento": {
+            "type": "string",
+            "enum": ["dinheiro", "pix", "debito", "credito"],
+            "example": "pix"
+          },
+          "tipoPedido": {
+            "type": "string",
+            "enum": ["retirada", "entrega"],
+            "example": "retirada"
+          },
+          "rua": {
+            "type": "string",
+            "example": "Rua das Flores"
+          },
+          "numero": {
+            "type": "string",
+            "example": "123"
+          },
+          "bairro": {
+            "type": "string",
+            "example": "Centro"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pendente", "confirmado", "entregue"],
+            "example": "pendente"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-04-11T10:30:00Z"
+          }
+        }
+      },
+      "Admin": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@cafeteria.com"
+          },
+          "nome": {
+            "type": "string",
+            "example": "Administrador"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Erro ao processar requisição"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/cardapio": {
+      "get": {
+        "tags": [
+          "Cardápio"
+        ],
+        "summary": "Listar todos os itens do cardápio",
+        "description": "Retorna uma lista com todos os itens disponíveis no cardápio",
+        "responses": {
+          "200": {
+            "description": "Lista de itens do cardápio",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CardapioItem"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cardápio"
+        ],
+        "summary": "Adicionar novo item ao cardápio",
+        "description": "Cria um novo item no cardápio",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "categoria": {
+                    "type": "string"
+                  },
+                  "preco": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Item criado com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/cardapio/{id}": {
+      "put": {
+        "tags": [
+          "Cardápio"
+        ],
+        "summary": "Atualizar item do cardápio",
+        "description": "Atualiza um item existente no cardápio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string"
+                  },
+                  "categoria": {
+                    "type": "string"
+                  },
+                  "preco": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Item atualizado com sucesso"
+          },
+          "404": {
+            "description": "Item não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Cardápio"
+        ],
+        "summary": "Deletar item do cardápio",
+        "description": "Remove um item do cardápio",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Item deletado com sucesso"
+          },
+          "404": {
+            "description": "Item não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/pedidos": {
+      "get": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Listar todos os pedidos",
+        "description": "Retorna uma lista com todos os pedidos registrados",
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Pedido"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Pedidos"
+        ],
+        "summary": "Criar novo pedido",
+        "description": "Cria um novo pedido no sistema",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nomeCliente": {
+                    "type": "string"
+                  },
+                  "itens": {
+                    "type": "array"
+                  },
+                  "formaPagamento": {
+                    "type": "string"
+                  },
+                  "tipoPedido": {
+                    "type": "string"
+                  },
+                  "rua": {
+                    "type": "string"
+                  },
+                  "numero": {
+                    "type": "string"
+                  },
+                  "bairro": {
+                    "type": "string"
+                  },
+                  "observacoes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Pedido criado com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Login do administrador",
+        "description": "Autentica um administrador no sistema",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "senha": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "admin": {
+                      "$ref": "#/components/schemas/Admin"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login realizado com sucesso"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Email ou senha incorretos"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    }
+  }
+}
