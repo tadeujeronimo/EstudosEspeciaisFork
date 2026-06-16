@@ -1,85 +1,287 @@
-# Estudos Especiais - Café Gourmet
+# Estudos Especiais – Café Gourmet (CG) ☕
 
-Aplicação web full stack para gestão de cafeteria, com backend em Node.js/Express, frontend em React e banco de dados PostgreSQL gerenciado com Prisma.
+[![CI](https://github.com/Lanna-Maria/EstudosEspeciais/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Lanna-Maria/EstudosEspeciais/actions/workflows/ci.yml)
+[![Deploy Front](https://github.com/Lanna-Maria/EstudosEspeciais/actions/workflows/deploy-front.yml/badge.svg?branch=main)](https://github.com/Lanna-Maria/EstudosEspeciais/actions/workflows/deploy-front.yml)
+[![Deploy Back](https://github.com/Lanna-Maria/EstudosEspeciais/actions/workflows/deploy-back.yml/badge.svg?branch=main)](https://github.com/Lanna-Maria/EstudosEspeciais/actions/workflows/deploy-back.yml)
 
-## Sobre o Projeto
+Projeto web de uma cafeteria, com backend em Node.js/Express, frontend em React e banco de dados PostgreSQL gerenciado com Prisma.
+
+---
+
+## Descrição
 
 Projeto desenvolvido durante a disciplina de Estudos Especiais (Gerência e Configuração de Software) - 2026.1 da UFC.
 
-### Grupo (pós-graduação):
+### 👩‍💻 Grupo da Pós-graduação (Equipe B)
 
-- 597157 Tadeu dos Santos Jerônimo
-- 597159 Lanna Maria Ibiapina da Silva Mesquita
-- 602690 Ynã de Queiroz Ponte
-- 608616 Alanna Maria Machado Alves Paiva
+| Matrícula | Nome |
+|-----------|------|
+| 597157 | [Tadeu dos Santos Jerônimo](https://github.com/tadeujeronimo) |
+| 597159 | [Lanna Maria Ibiapina da Silva Mesquita](https://github.com/Lanna-Maria) |
+| 602690 | [Ynã de Queiroz Ponte](https://github.com/ynaponte) |
+| 608616 | [Alanna Maria Machado Alves Paiva](https://github.com/alannapaiva) |
 
-## Funcionalidades principais
+## 🎯 Funcionalidades
 
-- Exibição do cardápio por categorias.
-- Criação de pedidos com retirada ou entrega.
-- Login e painel administrativo para acompanhamento dos pedidos.
+- **Gerenciamento de Cardápio**: Adicionar, editar e remover itens do menu (com suporte a imagem)
+- **Pedidos**: Criar, visualizar e gerenciar pedidos com status em tempo real
+- **Dashboard**: Visualizar estatísticas e histórico de vendas
+- **Autenticação de Admin**: Login seguro com JWT para administradores
+- **Gestão de Forma de Pagamento e Entrega**: Rastreamento de pedidos por endereço, com suporte a troco
+- **Documentação de API**: Swagger UI disponível para explorar os endpoints
 
-## Tecnologias
+## 🛠️ Tecnologias Utilizadas
 
-- Node.js
-- Express
-- Prisma
-- PostgreSQL
-- React
-- React Router
-- React Bootstrap
-- Axios
+### Backend
+- **Node.js** com **Express 5**
+- **Prisma ORM** para gerenciamento de banco de dados
+- **PostgreSQL** como banco de dados
+- **JSON Web Token (jsonwebtoken)** para autenticação via JWT
+- **bcrypt** para hash seguro de senhas
+- **multer** para upload de imagens
+- **swagger-autogen** + **swagger-ui-express** para documentação automática da API
+- **CORS** para controle de origem
+- **Jest** para testes, com **fast-check** para testes baseados em propriedades
 
-## Como executar
+### Frontend
+- **React 19** com **React Router v6**
+- **React Bootstrap** para componentes UI
+- **Axios** para requisições HTTP
+- **Bootstrap 5** para estilização
+- **@testing-library/react** para testes de componentes
 
-### 1. Configurar variáveis de ambiente
+## 🔐 Segurança
 
-No diretório back, crie um arquivo .env:
+- Autenticação de administrador com **JWT** (JSON Web Token)
+- Senhas protegidas com hash via **bcrypt**
+- CORS configurado para controle de origem cruzada
+- Validações de integridade garantidas pelo schema do Prisma
 
-```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/nomebanco?schema=public"
-PORT=4000
+## 📁 Estrutura Resumida do Projeto
+
+```
+EstudosEspeciais/
+├── back/                    # Backend - API Express
+│   ├── src/
+│   │   ├── controllers/     # Controladores da aplicação
+│   │   └── routes/          # Rotas da API
+│   ├── prisma/
+│   │   ├── schema.prisma    # Schema do banco de dados
+│   │   └── migrations/      # Histórico de migrações
+│   ├── tests/               # Testes
+│   └── package.json
+├── front/                   # Frontend - React
+│   ├── src/
+│   │   ├── components/      # Componentes reutilizáveis
+│   │   ├── pages/           # Páginas principais
+│   │   ├── services/        # Serviços de API
+│   │   ├── dashboard/       # Páginas do dashboard
+│   │   └── App.test.js      # Testes
+│   └── package.json
+├── docs/                    # Documentação do projeto
+├── .github/workflows/       # Workflows de CI e deploy
+├── LICENSE
+└── README.md
 ```
 
-No diretório front, crie um arquivo .env:
+## 🚀 Como Executar
+
+### Pré-requisitos
+- Node.js (v20+)
+- PostgreSQL instalado e rodando
+- npm ou yarn
+
+### Instalação do Backend
+
+```bash
+cd back
+npm install
+```
+
+Crie um arquivo `.env` na pasta `back` com:
+
+```env
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/cafe_gourmet"
+PORT=4000
+JWT_SECRET="sua_chave_secreta"
+```
+
+Aplique as migrações:
+```bash
+npx prisma migrate dev
+```
+
+#### 🌱 Seed (dados iniciais)
+
+Para popular o banco com dados de exemplo:
+```bash
+npx prisma db seed
+```
+
+Isso criará:
+- **Administrador padrão**: `admin@admin.com` / senha: `123`
+- **20 itens no cardápio** nas categorias: Cafés, Sobremesas, Especiais, Bebidas Geladas e Chás
+
+(Opcional) Gere a documentação Swagger:
+```bash
+npm run swagger
+```
+
+Inicie o servidor:
+```bash
+npm run dev    # Desenvolvimento com nodemon
+npm start      # Produção
+```
+
+O backend rodará em `http://localhost:4000` por padrão.
+A documentação Swagger estará disponível em `http://localhost:4000/api-docs`.
+
+### Instalação do Frontend
+
+```bash
+cd front
+npm install
+```
+
+Crie um arquivo `.env` na pasta `front` com:
 
 ```env
 REACT_APP_API_URL=http://localhost:4000
 ```
 
-### 2. Instalar dependências e preparar banco
-
+Inicie o servidor de desenvolvimento:
 ```bash
-cd back
-npm install
-npx prisma generate
-npx prisma migrate dev
-npm run seed
-```
-
-```bash
-cd front
-npm install
-```
-
-### 3. Iniciar aplicação
-
-```bash
-cd back
-node server.js
-```
-
-```bash
-cd front
 npm start
 ```
 
-- Back-end: http://localhost:4000
-- Front-end: http://localhost:3000
+O frontend abrirá em `http://localhost:3000` por padrão.
 
-### 4. Credenciais iniciais
+## 💻 Scripts Disponíveis
 
-O seed cria um administrador padrão:
+### Backend
+- `npm run dev` — Inicia o servidor em modo desenvolvimento (nodemon)
+- `npm start` — Inicia o servidor em produção
+- `npm run swagger` — Gera a documentação Swagger (`swagger-output.json`)
+- `npm test` — Executa os testes com Jest
+- `npm run vercel-build` — Gera o Prisma Client para deploy no Vercel
 
-- Email: admin@admin.com
-- Senha: 123
+### Frontend
+- `npm start` — Inicia o servidor de desenvolvimento
+- `npm run build` — Cria build otimizado para produção
+- `npm test` — Executa os testes com React Testing Library
+
+## 🌐 Deploy
+
+O projeto é publicado no **Vercel** por meio de GitHub Actions, com validação de testes antes de cada deploy.
+Os arquivos `vercel.json` em `front/` e `back/` mantêm a configuração de cada aplicação.
+
+| Serviço | URL |
+|---------|-----|
+| Frontend | https://cafe-gourmet-front.vercel.app |
+| Backend (API) | https://cafe-gourmet-back.vercel.app |
+
+## ⚙️ Workflows (GitHub Actions)
+
+O repositório possui três workflows automatizados, todos rodando em **Node.js 20** com Ubuntu:
+
+### CI (`.github/workflows/ci.yml`)
+Acionado em `push` e `pull_request` para a branch `main`.
+- **Test Frontend**: instala dependências, garante que `react-router-dom` está disponível e executa os testes sem modo watch.
+- **Test Backend**: instala dependências e executa os testes com Jest.
+
+Os dois jobs rodam em paralelo, com cada um operando dentro de seu respectivo diretório (`front/` ou `back/`).
+
+### Deploy Frontend (`.github/workflows/deploy-front.yml`)
+Acionado em `push` para a branch `main`.
+- Executa os **testes do frontend** primeiro (job `test`).
+- Só realiza o **deploy no Vercel** (job `deploy`) se os testes passarem (`needs: test`).
+- Usa concorrência com `group: deploy-frontend` para evitar deploys simultâneos (sem cancelar o em andamento).
+
+### Deploy Backend (`.github/workflows/deploy-back.yml`)
+Acionado em `push` para a branch `main`.
+- Executa os **testes do backend** primeiro (job `test`).
+- Só realiza o **deploy no Vercel** (job `deploy`) se os testes passarem (`needs: test`).
+- Usa concorrência com `group: deploy-backend` para evitar deploys simultâneos.
+
+Os workflows de deploy requerem os seguintes secrets configurados no repositório:
+- `VERCEL_TOKEN` — Token de autenticação do Vercel
+- `VERCEL_ORG_ID` — ID da organização no Vercel
+- `VERCEL_PROJECT_ID_FRONT` — ID do projeto frontend no Vercel
+- `VERCEL_PROJECT_ID_BACK` — ID do projeto backend no Vercel
+
+## 🔌 Rotas da API
+
+A base da API em produção é `https://cafe-gourmet-back.vercel.app/api`.
+
+### Admin
+| Método | Rota | Auth | Descrição |
+|--------|------|------|-----------|
+| `POST` | `/admin/login` | ❌ | Login do administrador; retorna token JWT |
+| `GET` | `/admin/dashboard` | ✅ JWT | Verifica acesso autorizado do admin |
+
+### Cardápio
+| Método | Rota | Auth | Descrição |
+|--------|------|------|-----------|
+| `GET` | `/cardapio` | ❌ | Lista todos os itens do cardápio |
+| `GET` | `/cardapio/:id` | ❌ | Retorna um item pelo ID |
+| `POST` | `/cardapio` | ✅ JWT | Adiciona novo item (aceita upload de imagem) |
+| `PUT` | `/cardapio/:id` | ✅ JWT | Atualiza item existente (aceita upload de imagem) |
+| `DELETE` | `/cardapio/:id` | ✅ JWT | Remove um item do cardápio |
+
+### Dashboard
+| Método | Rota | Auth | Descrição |
+|--------|------|------|-----------|
+| `GET` | `/dashboard` | ✅ JWT | Retorna pedidos para o painel administrativo |
+| `PUT` | `/dashboard/:id` | ✅ JWT | Atualiza o status de um pedido |
+
+### Pedidos
+| Método | Rota | Auth | Descrição |
+|--------|------|------|-----------|
+| `POST` | `/pedidos` | ❌ | Cria um novo pedido |
+| `GET` | `/pedidos` | ❌ | Lista todos os pedidos |
+
+## 📊 Modelagem de Dados
+
+### Administrador
+| Campo | Tipo | Obrigatório | Descrição |
+|-------|------|:-----------:|-----------|
+| `id` | Int | ✅ | ID único (autoincremento) |
+| `email` | String | ✅ | Email único |
+| `senha` | String | ✅ | Senha criptografada com bcrypt |
+| `criadoEm` | DateTime | ✅ | Data de criação |
+
+### Cardápio
+| Campo | Tipo | Obrigatório | Descrição |
+|-------|------|:-----------:|-----------|
+| `id` | Int | ✅ | ID único (autoincremento) |
+| `nome` | String | ✅ | Nome do item |
+| `preco` | Float | ✅ | Preço do item |
+| `categoria` | String | ✅ | Categoria |
+| `imagem` | String | ❌ | URL ou caminho da imagem |
+| `criadoEm` | DateTime | ✅ | Data de criação |
+
+### Pedido
+| Campo | Tipo | Obrigatório | Descrição |
+|-------|------|:-----------:|-----------|
+| `id` | Int | ✅ | ID único (autoincremento) |
+| `nomeCliente` | String | ✅ | Nome do cliente |
+| `itens` | JSON | ✅ | Lista de itens do pedido |
+| `precoTotal` | Float | ✅ | Preço total |
+| `status` | String | ✅ | Status do pedido — padrão `"Pendente"` (ex.: Em Preparo, Pronto, Entregue) |
+| `formaPagamento` | String | ❌ | Forma de pagamento |
+| `tipoPedido` | String | ❌ | Tipo (Entrega, Balcão, etc.) |
+| `rua` | String | ❌ | Rua para entrega |
+| `numero` | String | ❌ | Número para entrega |
+| `bairro` | String | ❌ | Bairro para entrega |
+| `precisaTroco` | Boolean | ❌ | Se o cliente precisa de troco |
+| `trocoPara` | Float | ❌ | Valor para o qual dar troco |
+| `observacoes` | String | ❌ | Observações adicionais |
+| `criadoEm` | DateTime | ✅ | Data de criação |
+
+## 📚 Documentação Adicional
+
+Veja a pasta [`docs/`](docs/) para informações sobre configurações e requisitos do projeto.
+
+## 📄 Licença
+
+[MIT](LICENSE)

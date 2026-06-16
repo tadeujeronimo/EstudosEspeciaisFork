@@ -148,7 +148,7 @@
 - **ID:** IC-014
 - **Tipo:** Documentação
 - **Versão:** 1.0.0
-- **Repositório:** [GitHub/docs/openapi.yaml](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/openapi.yaml)
+- **Repositório:** [GitHub/docs/api-spec.yaml](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/docs/api-spec.yaml)
 - **Branch:** docs/project-specifications
 - **Commit ID:** 622c017d97167c46fa4ef1731a51f276c2824828
 - **Mudanças:** Inclusão da especificação OpenAPI 3.0 da API backend, documentando os endpoints Express expostos para cardápio, pedidos, login administrativo e dashboard. Arquivo: `docs/api-spec.yaml`.
