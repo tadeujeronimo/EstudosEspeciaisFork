@@ -12,6 +12,7 @@ WORKDIR /app
 
 # Copia manifests primeiro para aproveitar cache de layers do Docker
 COPY package*.json ./
+COPY prisma ./prisma/
 
 RUN npm install
 
