@@ -20,7 +20,9 @@ function AdminLogin() {
       const data = await loginAdmin(email, senha);
 
       localStorage.setItem('admin', JSON.stringify(data.admin));
-      localStorage.setItem('auth', 'true');
+
+      // salva o JWT
+      localStorage.setItem('auth', data.token);
 
       navigate('/admin/dashboard');
     } catch (error) {
@@ -53,4 +55,4 @@ function AdminLogin() {
   );
 }
 
-export default AdminLogin
+export default AdminLogin;
