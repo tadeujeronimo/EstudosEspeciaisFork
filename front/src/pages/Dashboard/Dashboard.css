@@ -271,3 +271,34 @@
     flex-direction: column;
   }
 }
+
+.fab-add-item {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B4513, #A0522D);
+  color: #ffffff;
+  border: none;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.fab-add-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 28px rgba(139, 69, 19, 0.55);
+}
+
+.fab-add-item:active {
+  transform: scale(0.95);
+}

@@ -1,5 +1,7 @@
+import { API_BASE } from './api';
+
 export async function buscarPedidos() {
-  const res = await fetch('http://localhost:3000/api/dashboard');
+  const res = await fetch(`${API_BASE}/api/dashboard`);
   const data = await res.json();
 
   if (!Array.isArray(data)) {
@@ -10,7 +12,7 @@ export async function buscarPedidos() {
 }
 
 export async function atualizarStatusPedido(id, status) {
-  const res = await fetch(`http://localhost:3000/api/dashboard/${id}`, {
+  const res = await fetch(`${API_BASE}/api/dashboard/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

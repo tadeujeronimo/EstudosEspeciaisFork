@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { buscarPedidos, atualizarStatusPedido } from '../../services/dashboardService';
 import OrderCard from '../../components/OrderCard/OrderCard';
+import AddItemModal from '../../components/AddItemModal/AddItemModal';
 
 import './Dashboard.css';
 
 function Dashboard() {
   const [pedidos, setPedidos] = useState([]);
+  const [showAddItem, setShowAddItem] = useState(false);
 
   const carregarPedidos = async () => {
     try {
@@ -131,8 +133,20 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      <button
+        className="fab-add-item"
+        onClick={() => setShowAddItem(true)}
+        title="Adicionar item ao cardápio"
+        aria-label="Adicionar item ao cardápio"
+      >
+        +
+      </button>
+      <AddItemModal
+        isOpen={showAddItem}
+        onClose={() => setShowAddItem(false)}
+      />
     </div>
   );
 }
 
-export default Dashboard
+export default Dashboard;
