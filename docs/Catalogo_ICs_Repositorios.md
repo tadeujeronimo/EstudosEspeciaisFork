@@ -10,7 +10,7 @@
 - **Nome do Projeto:** Cafeteria Gourmet
 - **Responsável pela Gerência de Configuração (GC):** Ynã Ponte
 - **Data de Criação:** 07/04/2026
-- **Última Atualização:** 16/06/2026
+- **Última Atualização:** 17/06/2026
 
 ---
 
@@ -18,7 +18,7 @@
 
 | ID do IC | Nome do Item | Tipo (Código/Doc/Teste) | Localização (Repositório) | Versão Atual | Responsável | Status |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| IC-001 | Documentação do Projeto | Documentação | [GitHub/README.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/README.md) | `v1.1.0` | Tadeu Jerônimo | Ativo |
+| IC-001 | Documentação do Projeto | Documentação | [GitHub/README.md](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/README.md) | `v1.1.1` | Tadeu Jerônimo | Ativo |
 | IC-002 | Configuração de Dependências e Build Backend | Dependências e Builds | [GitHub/back](https://github.com/Lanna-Maria/EstudosEspeciais/tree/main/back) | `v1.0.0` | Tadeu Jerônimo | Ativo |
 | IC-003 | Aplicação Express | Código | [GitHub/app.js](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/back/app.js) | `v1.3.0` | Tadeu Jerônimo | Ativo |
 | IC-004 | Inicialização do Servidor | Código |[GitHub/server.js](https://github.com/Lanna-Maria/EstudosEspeciais/blob/main/back/server.js) | `v1.0.0` | Lanna Mesquita | Ativo |
@@ -85,3 +85,4 @@ git push origin --tags
 | 09/06/2026 | v1.0.0 | Registro do IC-018: documentação do processo de CI/CD | Tadeu Jerônimo |
 | 14/06/2026 | v1.0.0 | Atualização dos IC-015, IC-016 e IC-018 | Tadeu Jerônimo |
 | 16/06/2026 | v1.0.0 | Atualização dos IC-001, IC-015 e IC-016 | Tadeu Jerônimo |
+| 17/06/2026 | v1.0.0 | Atualização dos IC-001 (README) | Tadeu Jerônimo |

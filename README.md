@@ -120,7 +120,6 @@ npx prisma db seed
 
 Isso criará:
 - **Administrador padrão**: `admin@admin.com` / senha: `123`
-- **20 itens no cardápio** nas categorias: Cafés, Sobremesas, Especiais, Bebidas Geladas e Chás
 
 (Opcional) Gere a documentação Swagger:
 ```bash
