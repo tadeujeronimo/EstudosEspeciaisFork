@@ -1,5 +1,7 @@
+import { API_BASE } from './api';
+
 export async function loginAdmin(email, senha) {
-  const res = await fetch('http://localhost:4000/api/admin/login', {
+  const res = await fetch(`${API_BASE}/api/admin/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

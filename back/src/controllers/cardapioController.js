@@ -1,5 +1,25 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const path = require('path');
+const fs = require('fs');
+
+// ── Blob provider ─────────────────────────────────────────────────────────────
+// When USE_LOCAL_STORAGE=true (Docker / local testing) we skip Vercel Blob and
+// save files to disk instead, returning a localhost URL.
+// In production (Vercel) the env var is absent and the real SDK is used.
+let put;
+if (process.env.USE_LOCAL_STORAGE === 'true') {
+  put = async (filename, buffer, _opts) => {
+    const uploadDir = path.join(__dirname, '..', '..', 'uploads');
+    fs.mkdirSync(uploadDir, { recursive: true });
+    // Flatten the path so "menu-items/123-foto.jpg" becomes "menu-items-123-foto.jpg"
+    const safeName = filename.replace(/\//g, '-');
+    fs.writeFileSync(path.join(uploadDir, safeName), buffer);
+    return { url: `http://localhost:${process.env.PORT || 4000}/uploads/${safeName}` };
+  };
+} else {
+  ({ put } = require('@vercel/blob'));
+}
 
 // Listar todos os itens
 const getAllMenuItems = async (req, res) => {
@@ -50,17 +70,25 @@ const getMenuItemById = async (req, res) => {
 // Criar item
 const addMenuItem = async (req, res) => {
   try {
-    console.log('BODY:', req.body);
-    console.log('FILE:', req.file);
-
     const { nome, preco, categoria } = req.body;
+
+    let imagemUrl = null;
+
+    if (req.file) {
+      const filename = `menu-items/${Date.now()}-${req.file.originalname}`;
+      const blob = await put(filename, req.file.buffer, {
+        access: 'public',
+        contentType: req.file.mimetype,
+      });
+      imagemUrl = blob.url;
+    }
 
     const item = await prisma.cardapio.create({
       data: {
         nome,
         preco: Number(preco),
         categoria,
-        imagem: req.file ? `/uploads/${req.file.filename}` : null,
+        imagem: imagemUrl,
       },
     });
 
@@ -87,7 +115,12 @@ const updateMenuItem = async (req, res) => {
     };
 
     if (req.file) {
-      dadosAtualizacao.imagem = `/uploads/${req.file.filename}`;
+      const filename = `menu-items/${Date.now()}-${req.file.originalname}`;
+      const blob = await put(filename, req.file.buffer, {
+        access: 'public',
+        contentType: req.file.mimetype,
+      });
+      dadosAtualizacao.imagem = blob.url;
     }
 
     const itemAtualizado = await prisma.cardapio.update({

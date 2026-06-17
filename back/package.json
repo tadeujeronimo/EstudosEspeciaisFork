@@ -9,7 +9,8 @@
     "swagger": "node swagger.js",
     "postinstall": "prisma generate",
     "vercel-build": "prisma generate",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --watchAll --runInBand"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -17,13 +18,16 @@
   "jest": {
     "setupFilesAfterEnv": [
       "<rootDir>/tests/setup.js"
-    ]
+    ],
+    "testEnvironment": "node",
+    "testMatch": ["**/tests/**/*.test.js"]
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^6.15.0",
+    "@vercel/blob": "^0.27.1",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
@@ -36,6 +40,7 @@
   "devDependencies": {
     "fast-check": "^4.8.0",
     "jest": "^30.4.2",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "supertest": "^7.0.0"
   }
 }

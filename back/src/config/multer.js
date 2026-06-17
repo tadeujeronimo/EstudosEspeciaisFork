@@ -1,16 +1,16 @@
 const multer = require('multer');
-const path = require('path');
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'src/uploads');
-  },
+const storage = multer.memoryStorage();
 
-  filename: (req, file, cb) => {
-    const extensao = path.extname(file.originalname);
-
-    cb(null, `${Date.now()}${extensao}`);
+module.exports = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Formato de imagem não suportado. Use JPEG, PNG ou WebP.'));
+    }
   },
 });
-
-module.exports = multer({ storage });
