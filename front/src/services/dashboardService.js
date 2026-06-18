@@ -1,7 +1,12 @@
 import { API_BASE } from './api';
 
 export async function buscarPedidos() {
-  const res = await fetch(`${API_BASE}/api/dashboard`);
+  const token = localStorage.getItem('auth');
+  const res = await fetch(`${API_BASE}/api/dashboard`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
   const data = await res.json();
 
   if (!Array.isArray(data)) {
@@ -12,10 +17,12 @@ export async function buscarPedidos() {
 }
 
 export async function atualizarStatusPedido(id, status) {
+  const token = localStorage.getItem('auth');
   const res = await fetch(`${API_BASE}/api/dashboard/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
     },
     body: JSON.stringify({ status }),
   });
