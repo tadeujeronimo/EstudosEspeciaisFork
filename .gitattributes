@@ -1,0 +1,5 @@
+* text=auto
+
+# Arquivos que rodam no Docker (Linux) precisam ser sempre LF, não importando o SO que os baixou
+*.sh text eol=lf
+Dockerfile text eol=lf
