@@ -111,7 +111,7 @@ function Dashboard() {
         <div className="column">
           <h2>✅ Concluídos</h2>
           <div className="column-cards">
-            {pendentes.map((pedido) => (
+            {concluidos.map((pedido) => (
               <OrderCard
                 key={pedido.id}
                 pedido={pedido}
@@ -123,7 +123,7 @@ function Dashboard() {
         <div className="column">
           <h2>❌ Cancelados</h2>
           <div className="column-cards">
-            {pendentes.map((pedido) => (
+            {cancelados.map((pedido) => (
               <OrderCard
                 key={pedido.id}
                 pedido={pedido}

@@ -91,19 +91,25 @@ EstudosEspeciais/
 - PostgreSQL instalado e rodando
 - npm ou yarn
 
-### Instalação do Backend
+### Instalação do Backend (Desenvolvimento Local)
+
+> **⚠️ IMPORTANTE: Diferença entre Local e Docker**
+> - **Para rodar com Docker**: Não crie uma variável `DATABASE_URL` no `.env` da raiz, pois o Docker Compose montará a URL automaticamente para você a partir das credenciais do postgres. Além disso, o Dockerfile do backend já inclui as ferramentas de compilação C++ (`make`, `gcc`, etc) necessárias para que a biblioteca `bcrypt` instale nativamente no Alpine Linux.
+> - **Para rodar Local (sem Docker)**: Siga as instruções abaixo e utilize o arquivo `back/.env`.
 
 ```bash
 cd back
 npm install
 ```
 
-Crie um arquivo `.env` na pasta `back` com:
+Crie um arquivo `.env` na pasta `back` copiando o `back/.env.example` e preenchendo:
 
 ```env
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/cafe_gourmet"
+# Utilize localhost para rodar sem Docker
+DATABASE_URL="postgresql://cafeteria:cafeteria123@localhost:5432/cafeteria_db"
 PORT=4000
 JWT_SECRET="sua_chave_secreta"
+USE_LOCAL_STORAGE=true
 ```
 
 Aplique as migrações:
@@ -120,7 +126,8 @@ npx prisma db seed
 
 Isso criará:
 - **Administrador padrão**: `admin@admin.com` / senha: `123`
-- **20 itens no cardápio** nas categorias: Cafés, Sobremesas, Especiais, Bebidas Geladas e Chás
+
+> **Nota sobre Falhas no Seed**: O script de seed (`seed.js`) possui tratamento de erro explícito com `process.exit(1)`. Caso a biblioteca `bcrypt` falhe (ex: rodando em uma imagem Alpine limpa sem compiladores) ou o banco não esteja pronto, o erro será exposto imediatamente e impedirá o sistema de subir num estado defeituoso.
 
 (Opcional) Gere a documentação Swagger:
 ```bash
@@ -135,6 +142,19 @@ npm start      # Produção
 
 O backend rodará em `http://localhost:4000` por padrão.
 A documentação Swagger estará disponível em `http://localhost:4000/api-docs`.
+
+---
+
+### Executando via Docker Compose
+
+Para subir toda a infraestrutura de uma vez (Postgres, Backend e Frontend):
+
+1. Na **raiz** do projeto, crie o `.env` (copiando `.env.example`). Deixe apenas as variáveis básicas, **sem** `DATABASE_URL`.
+2. O repositório já contém um `.gitattributes` forçando a quebra de linha `LF` nos scripts (como `entrypoint.sh`). Se você usa Windows, isso evita falhas bizarras no carregamento do entrypoint por conta das quebras de linha `CRLF`.
+3. Rode:
+```bash
+docker compose up --build -d
+```
 
 ### Instalação do Frontend
 

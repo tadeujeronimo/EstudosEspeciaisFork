@@ -18,10 +18,29 @@ const createPedido = async (req, res) => {
     } = req.body;
 
     // Validação básica
-    if (!nomeCliente || !itens || itens.length === 0) {
+    if (!nomeCliente || !itens || !Array.isArray(itens) || itens.length === 0) {
       return res.status(400).json({
         error: 'Preencha os dados obrigatórios',
       });
+    }
+
+    // Validação dos itens (quantidades e preços)
+    for (const item of itens) {
+      if (typeof item.preco !== 'number' || item.preco < 0 ||
+          typeof item.quantidade !== 'number' || item.quantidade <= 0) {
+        return res.status(400).json({
+          error: 'Itens com valores ou quantidades inválidas',
+        });
+      }
+    }
+
+    // Validação de entrega
+    if (tipoPedido === 'entrega') {
+      if (!rua || !numero || !bairro) {
+        return res.status(400).json({
+          error: 'Endereço incompleto para entrega',
+        });
+      }
     }
 
     //  Calcular total
@@ -33,12 +52,15 @@ const createPedido = async (req, res) => {
     // TRATAMENTO DO TROCO
     let trocoConvertido = null;
 
-    if (precisaTroco === true || precisaTroco === 'true') {
+    if ((precisaTroco === true || precisaTroco === 'true') && formaPagamento === 'dinheiro') {
       const valor = Number(trocoPara);
 
-      if (!isNaN(valor) && valor > 0) {
-        trocoConvertido = valor;
+      if (isNaN(valor) || valor < precoTotal) {
+        return res.status(400).json({
+          error: 'Valor do troco inválido ou menor que o total do pedido',
+        });
       }
+      trocoConvertido = valor;
     }
 
     // Criar novo pedido

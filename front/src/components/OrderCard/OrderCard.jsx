@@ -39,8 +39,8 @@ export default function OrderCard({ pedido, atualizarStatus }) {
         {Array.isArray(pedido.itens) &&
           pedido.itens.map((item, i) => (
             <li key={i}>
-              {item.name}
-              <span>x{item.quantity}</span>
+              {item.nome}
+              <span>x{item.quantidade}</span>
             </li>
           ))}
       </ul>
