@@ -37,7 +37,7 @@ describe('cardapioController', () => {
     await addMenuItem(req, res);
 
     expect(mockPrisma.cardapio.create).toHaveBeenCalledWith({
-      data: { nome: 'Café', preco: 4, categoria: 'cafes', descricao: null },
+      data: { nome: 'Café', preco: 4, categoria: 'cafes', descricao: undefined },
     });
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith(novoItem);
@@ -56,7 +56,7 @@ describe('cardapioController', () => {
 
     expect(mockPrisma.cardapio.update).toHaveBeenCalledWith({
       where: { id: 2 },
-      data: { nome: 'Café', preco: 6, categoria: 'bebidas' },
+      data: { nome: 'Café', preco: 6, categoria: 'bebidas', descricao: undefined },
     });
 
     expect(res.status).toHaveBeenCalledWith(200);

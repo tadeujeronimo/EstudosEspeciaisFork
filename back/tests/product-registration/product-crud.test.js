@@ -19,7 +19,6 @@
 const request = require('supertest');
 const app = require('../../app');
 const { getAdminToken } = require('./helpers/auth');
-const { JPEG_1PX, PNG_1PX, PDF_BYTES, LARGE_IMAGE } = require('./helpers/fixtures');
 
 let token;
 let createdId; // ID of the item created in the first POST test — reused later
@@ -43,7 +42,7 @@ describe('GET /api/cardapio — public list', () => {
 // ── Create ────────────────────────────────────────────────────────────────────
 
 describe('POST /api/cardapio — create product', () => {
-  test('creates item without image → 201, imagem is null', async () => {
+  test('creates item without description → 201', async () => {
     const res = await request(app)
       .post('/api/cardapio')
       .set('Authorization', `Bearer ${token}`)
@@ -54,63 +53,26 @@ describe('POST /api/cardapio — create product', () => {
       nome: 'Espresso',
       preco: 5.5,
       categoria: 'Bebidas',
-      imagem: null,
     });
     expect(res.body.id).toBeDefined();
 
     createdId = res.body.id; // save for later tests
   });
 
-  test('creates item with JPEG image → 201, imagem URL contains filename', async () => {
+  test('creates item with description → 201', async () => {
     const res = await request(app)
       .post('/api/cardapio')
       .set('Authorization', `Bearer ${token}`)
-      .attach('imagem', JPEG_1PX, { filename: 'cafe.jpg', contentType: 'image/jpeg' })
-      .field('nome', 'Cappuccino')
-      .field('preco', '8.00')
-      .field('categoria', 'Bebidas');
+      .send({ nome: 'Misto Quente', preco: 12.0, categoria: 'Lanches', descricao: 'Pão de forma, presunto e queijo' });
 
     expect(res.status).toBe(201);
-    expect(res.body.imagem).toMatch(/cafe\.jpg$/);
-    expect(res.body.imagem).toMatch(/^http/);
-  });
-
-  test('creates item with PNG image → 201, imagem URL set', async () => {
-    const res = await request(app)
-      .post('/api/cardapio')
-      .set('Authorization', `Bearer ${token}`)
-      .attach('imagem', PNG_1PX, { filename: 'logo.png', contentType: 'image/png' })
-      .field('nome', 'Latte')
-      .field('preco', '9.50')
-      .field('categoria', 'Bebidas');
-
-    expect(res.status).toBe(201);
-    expect(res.body.imagem).toMatch(/logo\.png$/);
-  });
-
-  test('rejects unsupported file format (PDF) → multer error (400/500)', async () => {
-    const res = await request(app)
-      .post('/api/cardapio')
-      .set('Authorization', `Bearer ${token}`)
-      .attach('imagem', PDF_BYTES, { filename: 'documento.pdf', contentType: 'application/pdf' })
-      .field('nome', 'PDF Ruim')
-      .field('preco', '1.00')
-      .field('categoria', 'Teste');
-
-    // multer throws an error — Express may return 400 or 500 depending on Express version
-    expect([400, 500]).toContain(res.status);
-  });
-
-  test('rejects file larger than 5 MB → 413 or 500', async () => {
-    const res = await request(app)
-      .post('/api/cardapio')
-      .set('Authorization', `Bearer ${token}`)
-      .attach('imagem', LARGE_IMAGE, { filename: 'grande.jpg', contentType: 'image/jpeg' })
-      .field('nome', 'Imagem Grande')
-      .field('preco', '1.00')
-      .field('categoria', 'Teste');
-
-    expect([400, 413, 500]).toContain(res.status);
+    expect(res.body).toMatchObject({
+      nome: 'Misto Quente',
+      preco: 12.0,
+      categoria: 'Lanches',
+      descricao: 'Pão de forma, presunto e queijo'
+    });
+    expect(res.body.id).toBeDefined();
   });
 
   test('missing nome → creates with nome undefined (Prisma may reject)', async () => {
@@ -170,28 +132,16 @@ describe('GET /api/cardapio/:id — read single product', () => {
 // ── Update ────────────────────────────────────────────────────────────────────
 
 describe('PUT /api/cardapio/:id — update product', () => {
-  test('updates text fields only → 200, new values returned', async () => {
+  test('updates text fields and adds description → 200', async () => {
     const res = await request(app)
       .put(`/api/cardapio/${createdId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ nome: 'Espresso Duplo', preco: 7.0, categoria: 'Bebidas' });
+      .send({ nome: 'Espresso Duplo', preco: 7.0, categoria: 'Bebidas', descricao: 'Feito com grãos arábica' });
 
     expect(res.status).toBe(200);
     expect(res.body.nome).toBe('Espresso Duplo');
     expect(res.body.preco).toBe(7.0);
-  });
-
-  test('updates image → 200, imagem URL changes', async () => {
-    const res = await request(app)
-      .put(`/api/cardapio/${createdId}`)
-      .set('Authorization', `Bearer ${token}`)
-      .attach('imagem', PNG_1PX, { filename: 'nova-foto.png', contentType: 'image/png' })
-      .field('nome', 'Espresso Duplo')
-      .field('preco', '7.00')
-      .field('categoria', 'Bebidas');
-
-    expect(res.status).toBe(200);
-    expect(res.body.imagem).toMatch(/nova-foto\.png$/);
+    expect(res.body.descricao).toBe('Feito com grãos arábica');
   });
 
   test('update non-existent item → 500 (Prisma P2025)', async () => {
