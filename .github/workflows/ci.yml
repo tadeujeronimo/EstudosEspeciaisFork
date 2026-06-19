@@ -42,6 +42,25 @@ jobs:
       run:
         working-directory: back
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: projetofinal_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/projetofinal_test
+      BLOB_READ_WRITE_TOKEN: fake_token_for_tests
+
     steps:
       - uses: actions/checkout@v4
 
@@ -54,6 +73,12 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Run migrations
+        run: npx prisma migrate deploy
+
+      - name: Seed admin user
+        run: npx prisma db seed
 
       - name: Run tests
         run: npm test -- --passWithNoTests
