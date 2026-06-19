@@ -1,148 +1,11 @@
-// import React, { useState, useEffect } from 'react';
-// import { Tab, Tabs } from 'react-bootstrap';
-// import { getMenuItemsByCategory } from '../../services/menuCategoriesService';
-
-// import './Cardapio.css';
-
-// import coffe1 from '../../assets/imagens/cafe.png';
-// import coffe2 from '../../assets/imagens/sobremesa.png';
-// import coffe3 from '../../assets/imagens/salgados.png';
-// import coffe4 from '../../assets/imagens/bebidaGelada.png';
-// import coffe5 from '../../assets/imagens/cha.png';
-
-// function Cardapio() {
-//   const [currentImage, setCurrentImage] = useState(coffe1);
-  
-//   const [menuItems, setMenuItems] = useState({
-//     cafes: [],
-//     sobremesas: [],
-//     especiais: [],
-//     bebidasGeladas: [],
-//     chas: [],
-//   });
-
-//   useEffect(() => {
-//     async function loadMenuItems() {
-//       try {
-//         const data = await getMenuItemsByCategory();
-//         setMenuItems(data);
-//       } catch (error) {
-//         console.error('Erro ao buscar os itens do menu:', error);
-//       }
-//     }
-
-//     loadMenuItems();
-//   }, []);
-
-//   return (
-//     <div className="menu-container">
-//       <div className="menu-header">
-//         <h1>Café Gourmet</h1>
-//       </div>
-//       <div className="menu-content">
-//         <div className="menu-image">
-//           <img src={currentImage} alt="Menu" />
-//         </div>
-//         <div className="menu-tabs">
-//           <Tabs
-//             defaultActiveKey="cafes"
-//             id="styled-menu-tabs"
-//             className="mb-3"
-//             onSelect={(key) => {
-//               switch (key) {
-//                 case 'cafes':
-//                   setCurrentImage(coffe1);
-//                   break;
-//                 case 'sobremesas':
-//                   setCurrentImage(coffe2);
-//                   break;
-//                 case 'especiais':
-//                   setCurrentImage(coffe3);
-//                   break;
-//                 case 'bebidas-geladas':
-//                   setCurrentImage(coffe4);
-//                   break;
-//                 case 'chas':
-//                   setCurrentImage(coffe5);
-//                   break;
-//                 default:
-//                   setCurrentImage(coffe1);
-//               }
-//             }}
-//           >
-//             <Tab eventKey="cafes" title="Cafés">
-//               <ul className="menu-list">
-//                 {menuItems.cafes.map((item) => (
-//                   <li key={item.id}>
-//                     {item.nome} 
-//                     <span>R$ {(item.preco || 0).toFixed(2)}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </Tab>
-//             <Tab eventKey="sobremesas" title="Sobremesas">
-//               <ul className="menu-list">
-//                 {menuItems.sobremesas.map((item) => (
-//                   <li key={item.id}>
-//                     {item.nome} 
-//                     <span>R$ {(item.preco || 0).toFixed(2)}</span>                  </li>
-//                 ))}
-//               </ul>
-//             </Tab>
-//             <Tab eventKey="especiais" title="Especiais">
-//               <ul className="menu-list">
-//                 {menuItems.especiais.map((item) => (
-//                   <li key={item.id}>
-//                     {item.nome} 
-//                     <span>R$ {(item.preco || 0).toFixed(2)}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </Tab>
-//             <Tab eventKey="bebidas-geladas" title="Bebidas Geladas">
-//               <ul className="menu-list">
-//                 {menuItems.bebidasGeladas.map((item) => (
-//                   <li key={item.id}>
-//                     {item.nome} 
-//                     <span>R$ {(item.preco || 0).toFixed(2)}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </Tab>
-//             <Tab eventKey="chas" title="Chás">
-//               <ul className="menu-list">
-//                 {menuItems.chas.map((item) => (
-//                   <li key={item.id}>
-//                     {item.nome}
-//                     <span>R$ {(item.preco || 0).toFixed(2)}</span>
-//                   </li>
-//                 ))}
-//               </ul>
-//             </Tab>
-//           </Tabs>
-//         </div>
-//       </div>
-//     </div>
-//     // <section className="d-flex align-items-center justify-content-center">
-//     //     <div className="container text-center">
-//     //       <h1>Quem somos</h1>
-//     //       <p className="subtitle-menu">
-//     //         Mais que café, uma experiência para os sentidos. No Café Gourmet, cada
-//     //         detalhe é pensado para encantar você.
-//     //       </p>
-//     //     </div>
-//     //   </section>
-//   );
-// }
-
-// export default Cardapio;
-
 import React, { useEffect, useState } from 'react';
 import { getMenuItemsByCategory } from '../../services/menuCategoriesService';
 
 import './Cardapio.css';
+import bannerCafe from '../../assets/imagens/banner-cafe.png';
 
 function Cardapio() {
+
   const [menuItems, setMenuItems] = useState({
     cafes: [],
     sobremesas: [],
@@ -160,6 +23,7 @@ function Cardapio() {
     loadMenuItems();
   }, []);
 
+
   const renderSection = (titulo, items) => (
     <section className="menu-section">
       <h2>{titulo}</h2>
@@ -168,11 +32,9 @@ function Cardapio() {
         {items.map((item) => (
           <div key={item.id} className="menu-item">
             <h3>{item.nome}</h3>
-
             <p>
               {item.descricao || 'Descrição do produto'}
             </p>
-
             <span>
               R$ {(item.preco || 0).toFixed(2)}
             </span>
@@ -184,14 +46,15 @@ function Cardapio() {
 
   return (
     <div className="cardapio-page">
-      <section className="hero-menu">
+      <div className="hero-menu">
         <h1>Nosso Menu</h1>
-
-        <p>
-          Conheça nossos cafés especiais, sobremesas e bebidas.
-        </p>
-      </section>
-
+        <p> Conheça nossos cafés especiais, sobremesas e bebidas.</p>
+      </div>
+      <img
+        src={bannerCafe}
+        alt="Xícara de café"
+        className="bannercafe-image"
+      />
       <section className="menu-content">
         {renderSection('Cafés', menuItems.cafes)}
         {renderSection('Sobremesas', menuItems.sobremesas)}

@@ -1,5 +1,15 @@
 *{
-  font-family: "Playfair Display", serif;
+  font-family: Playfair Display;
+}
+
+.title{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.graocafe-image{
+  width: 10%;
 }
 
 .pedidos-container{
@@ -7,7 +17,7 @@
   padding: 15px 30px;
   width: 100%;
   margin: 40px auto;
-  max-width: 600px;
+  max-width: 700px;
 }
 
 .pedidos-container h2{
@@ -24,8 +34,8 @@
 .form-group label {
   display: block;
   margin-bottom: 5px;
- color: #3E2723;
- font-weight: 900;
+  color: #3E2723;
+  font-weight: 900;
 }
 
 .form-group input,
@@ -56,11 +66,9 @@
 }
 
 .menu-category-list button:hover {
- background-color: #A0522D;
-  border: #A0522D;
-
+  background-color: #A0522D;
+  border: 1px solid #A0522D;
 }
-
 
 .category-button {
   width: 48%;
@@ -73,11 +81,6 @@
   cursor: pointer;
   font-size: 16px;
   text-align: center;
-}
-
-.category-button:hover {
-  background-color: #A0522D !important;
-  border: none !important;
 }
 
 .pedidos-container h3{
@@ -137,7 +140,6 @@ button[type="submit"]:hover{
     color: #3E2723;
   }
 }
-
 
 .textarea {
   width: 100% !important;

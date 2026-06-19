@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Form } from 'react-bootstrap';
 import { getMenuOptions } from "../../services/menuOptionsService";
 import { createOrder } from "../../services/orderService";
+import graoCafe from '../../assets/imagens/grao-cafe.png';
+
 
 import "./Pedidos.css";
 
@@ -127,10 +129,25 @@ function Pedidos() {
     }
   };
 
+    const nomesCategorias = {
+      cafes: 'Cafés',
+      sobremesas: 'Sobremesas',
+      especiais: 'Especiais',
+      bebidasGeladas: 'Bebidas Geladas',
+      chas: 'Chás',
+    };
+  
+
   return (
     <div className="pedidos-container">
-      <h2>Faça seu pedido</h2>
-
+      <div className="title">
+        <h2>Faça seu pedido</h2>
+        <img
+          src={graoCafe}
+          alt="Xícara de café"
+          className="graocafe-image"
+        />
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nome:</label>
@@ -275,7 +292,7 @@ function Pedidos() {
               key={categoria}
               onClick={() => handleCategoriaClick(categoria)}
             >
-              {categoria}
+              {nomesCategorias[categoria] || categoria}
             </Button>
           ))}
         </div>
@@ -308,32 +325,69 @@ function Pedidos() {
         <h3>Total: R$ {calcularTotal(pedido.itens).toFixed(2)}</h3>
         <button type="submit">Enviar Pedido</button>
       </form>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Adicionar item</Modal.Title>
+          <Modal.Title>
+            <i className="bi bi-plus-circle me-2"></i>
+            Adicionar Item
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <select
-            value={itemAtual}
-            onChange={(e) => setItemAtual(e.target.value)}
-          >
-            <option value="">Selecione</option>
-            {Object.keys(menuItems[categoriaAtual] || {}).map((item) => (
-              <option key={item} value={item}>
-                {item} - R$ {menuItems[categoriaAtual][item].toFixed(2)}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            value={quantidadeAtual}
-            onChange={(e) => setQuantidadeAtual(parseInt(e.target.value))}
-            min="1"
-          />
+
+        <Modal.Body className="px-4 py-3">
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Produto</Form.Label>
+              <Form.Select
+                value={itemAtual}
+                onChange={(e) => setItemAtual(e.target.value)}
+              >
+                <option value="">Selecione um item</option>
+
+                {Object.keys(menuItems[categoriaAtual] || {}).map((item) => (
+                  <option key={item} value={item}>
+                    {item} - R$ {menuItems[categoriaAtual][item].toFixed(2)}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Quantidade</Form.Label>
+              <Form.Control
+                type="number"
+                value={quantidadeAtual}
+                onChange={(e) =>
+                  setQuantidadeAtual(parseInt(e.target.value) || 1)
+                }
+                min="1"
+              />
+            </Form.Group>
+          </Form>
         </Modal.Body>
-        <Modal.Footer className="meu-footer-modal">
-          <Button onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button onClick={handleAdicionarItem}>Adicionar</Button>
+
+        <Modal.Footer className="border-0 px-4 pb-4">
+          <Button
+            variant="outline-secondary"
+            onClick={() => setShowModal(false)}
+          >
+            Cancelar
+          </Button>
+
+          <Button
+            variant="success"
+            onClick={handleAdicionarItem}
+            disabled={!itemAtual}
+            style={{
+              backgroundColor: '#8B4513',
+              borderColor: '#8B4513'
+            }}
+          >
+            Adicionar ao Pedido
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

@@ -9,6 +9,11 @@ body {
   background: #FBF2E8;
 }
 
+.bannercafe-image{
+  width: 99%;
+  height: 100%;
+}
+
 .cardapio-page {
   background: #f5f5f5;
 }
@@ -20,7 +25,7 @@ body {
 }
 
 .hero-menu h1 {
-  font-size: 72px;
+  font-size: 60px;
   margin-bottom: 24px;
   font-family: "Playfair Display", serif;
 }
@@ -111,14 +116,6 @@ body {
 .menu-header p {
   font-size: 1.2rem;
   color: #d9a441;
-}
-
-.menu-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
 }
 
 .menu-image {
