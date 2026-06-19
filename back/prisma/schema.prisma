@@ -8,40 +8,40 @@ datasource db {
 }
 
 model Cardapio {
-  id          Int      @id @default(autoincrement())
-  nome        String
-  preco       Float
-  categoria   String
-  imagem    String?
-  criadoEm    DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  nome      String
+  preco     Float
+  categoria String
+  descricao String?
+  criadoEm  DateTime @default(now())
 }
 
 model Pedido {
-  id              Int      @id @default(autoincrement())
-  nomeCliente     String
-  itens           Json
-  precoTotal      Float
+  id          Int    @id @default(autoincrement())
+  nomeCliente String
+  itens       Json
+  precoTotal  Float
 
-  formaPagamento  String?
-  tipoPedido      String?
+  formaPagamento String?
+  tipoPedido     String?
 
-  rua             String?
-  numero          String?
-  bairro          String?
+  rua    String?
+  numero String?
+  bairro String?
 
-  precisaTroco    Boolean?
-  trocoPara       Float?
+  precisaTroco Boolean?
+  trocoPara    Float?
 
-  observacoes     String?
+  observacoes String?
 
-  status          String   @default("Pendente") // 👈 AQUI
+  status String @default("Pendente") 
 
-  criadoEm        DateTime @default(now())
+  criadoEm DateTime @default(now())
 }
 
 model Administrador {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  senha      String
-  criadoEm   DateTime @default(now())
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  senha    String
+  criadoEm DateTime @default(now())
 }

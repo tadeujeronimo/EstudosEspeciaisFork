@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middlewares/auth');
-const multer = require('../config/multer');
+
 
 const {
   getAllMenuItems,
@@ -17,9 +17,9 @@ router.get('/', getAllMenuItems);
 router.get('/:id', getMenuItemById);
 
 // Apenas administrador
-router.post('/', auth, multer.single('imagem'), addMenuItem);
+router.post('/', auth, addMenuItem);
 
-router.put('/:id', auth, multer.single('imagem'), updateMenuItem);
+router.put('/:id', auth, updateMenuItem);
 
 router.delete('/:id', auth, deleteMenuItem);
 

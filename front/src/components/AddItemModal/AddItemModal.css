@@ -165,6 +165,10 @@
   font-weight: bold;
 }
 
+textarea{
+  padding: 10px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
