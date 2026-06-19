@@ -6,8 +6,7 @@ function AddItemModal({ isOpen, onClose, onItemAdded }) {
   const [nome, setNome] = useState('');
   const [preco, setPreco] = useState('');
   const [categoria, setCategoria] = useState('cafes');
-  const [imagem, setImagem] = useState(null);
-  const [imagemPreview, setImagemPreview] = useState(null);
+  const [descricao, setDescricao] = useState('');
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [sucesso, setSucesso] = useState(false);
@@ -41,46 +40,8 @@ function AddItemModal({ isOpen, onClose, onItemAdded }) {
     };
   }, [isOpen, onClose]);
 
-  // Clean up object URL to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      if (imagemPreview) {
-        URL.revokeObjectURL(imagemPreview);
-      }
-    };
-  }, [imagemPreview]);
 
   if (!isOpen) return null;
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (imagemPreview) {
-      URL.revokeObjectURL(imagemPreview);
-      setImagemPreview(null);
-    }
-
-    if (file) {
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        setErro('O arquivo de imagem deve ter no máximo 5MB.');
-        setImagem(null);
-        return;
-      }
-      // Validate mime type
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        setErro('Formato de imagem não suportado. Use JPEG, PNG ou WebP.');
-        setImagem(null);
-        return;
-      }
-
-      setErro('');
-      setImagem(file);
-      setImagemPreview(URL.createObjectURL(file));
-    } else {
-      setImagem(null);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,30 +55,25 @@ function AddItemModal({ isOpen, onClose, onItemAdded }) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('nome', nome);
-    formData.append('preco', preco);
-    formData.append('categoria', categoria);
-    if (imagem) {
-      formData.append('imagem', imagem);
-    }
+    const item = {
+      nome,
+      preco,
+      categoria,
+      descricao,
+    };
 
     try {
-      await addMenuItem(formData, token);
+      await addMenuItem(item, token);
       setSucesso(true);
       if (onItemAdded) {
         onItemAdded();
       }
       setTimeout(() => {
-        // Reset states and close
         setNome('');
         setPreco('');
         setCategoria('cafes');
-        setImagem(null);
-        if (imagemPreview) {
-          URL.revokeObjectURL(imagemPreview);
-          setImagemPreview(null);
-        }
+        setDescricao('');
+
         setSucesso(false);
         onClose();
       }, 1500);
@@ -198,28 +154,14 @@ function AddItemModal({ isOpen, onClose, onItemAdded }) {
           </div>
 
           <div className="form-group">
-            <label>Imagem</label>
-            <label htmlFor="item-imagem" className="file-upload-label">
-              <span className="upload-icon">📷</span>
-              <span className="upload-text">
-                {imagem ? imagem.name : 'Selecionar Imagem (JPEG, PNG, WebP)'}
-              </span>
-            </label>
-            <input
-              id="item-imagem"
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={handleImageChange}
-              disabled={loading || sucesso}
-              style={{ display: 'none' }}
+            <label htmlFor="item-descricao">Descrição</label>
+            <textarea
+              id="item-descricao"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva o produto"
+              rows={4}
             />
-            {imagemPreview && (
-              <img
-                src={imagemPreview}
-                alt="Pré-visualização do item"
-                className="image-preview"
-              />
-            )}
           </div>
 
           {erro && <p className="modal-error" role="alert">{erro}</p>}

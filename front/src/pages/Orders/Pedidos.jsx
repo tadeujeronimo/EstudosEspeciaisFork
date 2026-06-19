@@ -1,28 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { getMenuOptions } from '../../services/menuOptionsService';
-import { createOrder } from '../../services/orderService';
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Form } from 'react-bootstrap';
+import { getMenuOptions } from "../../services/menuOptionsService";
+import { createOrder } from "../../services/orderService";
+import graoCafe from '../../assets/imagens/grao-cafe.png';
 
-import './Pedidos.css';
+
+import "./Pedidos.css";
 
 function Pedidos() {
   const [pedido, setPedido] = useState({
-    nomeCliente: '',
+    nomeCliente: "",
     itens: [],
-    formaPagamento: '',
-    tipoPedido: '',
-    rua: '',
-    numero: '',
-    bairro: '',
+    formaPagamento: "",
+    tipoPedido: "",
+    rua: "",
+    numero: "",
+    bairro: "",
     precisaTroco: false,
-    trocoPara: '',
-    observacoes: '',
+    trocoPara: "",
+    observacoes: "",
   });
 
   const [menuItems, setMenuItems] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const [categoriaAtual, setCategoriaAtual] = useState('');
-  const [itemAtual, setItemAtual] = useState('');
+  const [categoriaAtual, setCategoriaAtual] = useState("");
+  const [itemAtual, setItemAtual] = useState("");
   const [quantidadeAtual, setQuantidadeAtual] = useState(1);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ function Pedidos() {
         const data = await getMenuOptions();
         setMenuItems(data);
       } catch (error) {
-        console.error('Erro ao buscar itens do menu:', error);
+        console.error("Erro ao buscar itens do menu:", error);
       }
     }
 
@@ -40,14 +42,14 @@ function Pedidos() {
 
   const handleCategoriaClick = (categoria) => {
     setCategoriaAtual(categoria);
-    setItemAtual('');
+    setItemAtual("");
     setQuantidadeAtual(1);
     setShowModal(true);
   };
 
   const handleAdicionarItem = () => {
     if (!itemAtual || quantidadeAtual <= 0) {
-      alert('Selecione um item válido.');
+      alert("Selecione um item válido.");
       return;
     }
 
@@ -76,26 +78,26 @@ function Pedidos() {
     return itens.reduce((acc, item) => acc + item.preco * item.quantidade, 0);
   };
 
-  const handleSubmit = async (e)  => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!pedido.formaPagamento || !pedido.tipoPedido) {
-      alert('Preencha pagamento e tipo de pedido.');
+      alert("Preencha pagamento e tipo de pedido.");
       return;
     }
 
     if (
-      pedido.formaPagamento === 'dinheiro' &&
+      pedido.formaPagamento === "dinheiro" &&
       pedido.precisaTroco &&
       !pedido.trocoPara
     ) {
-      alert('Informe o valor para troco.');
+      alert("Informe o valor para troco.");
       return;
     }
 
-    if (pedido.tipoPedido === 'entrega') {
+    if (pedido.tipoPedido === "entrega") {
       if (!pedido.rua || !pedido.numero || !pedido.bairro) {
-        alert('Preencha o endereço completo.');
+        alert("Preencha o endereço completo.");
         return;
       }
     }
@@ -108,29 +110,44 @@ function Pedidos() {
     try {
       await createOrder(pedidoCorrigido);
 
-      alert('Pedido enviado com sucesso!');
+      alert("Pedido enviado com sucesso!");
 
       setPedido({
-        nomeCliente: '',
+        nomeCliente: "",
         itens: [],
-        formaPagamento: '',
-        tipoPedido: '',
-        rua: '',
-        numero: '',
-        bairro: '',
+        formaPagamento: "",
+        tipoPedido: "",
+        rua: "",
+        numero: "",
+        bairro: "",
         precisaTroco: false,
-        trocoPara: '',
-        observacoes: '',
+        trocoPara: "",
+        observacoes: "",
       });
     } catch (error) {
-      console.error('Erro ao enviar pedido:', error);
+      console.error("Erro ao enviar pedido:", error);
     }
   };
 
+    const nomesCategorias = {
+      cafes: 'Cafés',
+      sobremesas: 'Sobremesas',
+      especiais: 'Especiais',
+      bebidasGeladas: 'Bebidas Geladas',
+      chas: 'Chás',
+    };
+  
+
   return (
     <div className="pedidos-container">
-      <h2>Faça seu pedido</h2>
-
+      <div className="title">
+        <h2>Faça seu pedido</h2>
+        <img
+          src={graoCafe}
+          alt="Xícara de café"
+          className="graocafe-image"
+        />
+      </div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Nome:</label>
@@ -159,24 +176,41 @@ function Pedidos() {
             <option value="credito">Crédito</option>
           </select>
         </div>
-        {pedido.formaPagamento === 'dinheiro' && (
+        {pedido.formaPagamento === "dinheiro" && (
           <>
             <div className="form-group">
               <label>Precisa de troco?</label>
-              <select
-                value={pedido.precisaTroco}
-                onChange={(e) =>
-                  setPedido({
-                    ...pedido,
-                    precisaTroco: e.target.value === 'true',
-                    trocoPara:
-                      e.target.value === 'true' ? pedido.trocoPara : '',
-                  })
-                }
-              >
-                <option value="false">Não</option>
-                <option value="true">Sim</option>
-              </select>
+              <div className="troco-options">
+                  <label>
+                  <input
+                    type="radio"
+                    name="precisaTroco"
+                    checked={pedido.precisaTroco}
+                    onChange={() =>
+                      setPedido({
+                        ...pedido,
+                        precisaTroco: true,
+                      })
+                    }
+                  />
+                  Sim
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="precisaTroco"
+                    checked={!pedido.precisaTroco}
+                    onChange={() =>
+                      setPedido({
+                        ...pedido,
+                        precisaTroco: false,
+                        trocoPara: "",
+                      })
+                    }
+                  />
+                  Não
+                </label>
+              </div>
             </div>
             {pedido.precisaTroco && (
               <div className="form-group">
@@ -188,7 +222,7 @@ function Pedidos() {
                     setPedido({
                       ...pedido,
                       trocoPara:
-                        e.target.value === '' ? '' : Number(e.target.value),
+                        e.target.value === "" ? "" : Number(e.target.value),
                     })
                   }
                 />
@@ -210,7 +244,7 @@ function Pedidos() {
             <option value="entrega">Entrega</option>
           </select>
         </div>
-        {pedido.tipoPedido === 'entrega' && (
+        {pedido.tipoPedido === "entrega" && (
           <>
             <div className="form-group">
               <label>Rua:</label>
@@ -249,6 +283,7 @@ function Pedidos() {
             onChange={(e) =>
               setPedido({ ...pedido, observacoes: e.target.value })
             }
+            className="textarea"
           />
         </div>
         <div className="menu-category-list">
@@ -257,7 +292,7 @@ function Pedidos() {
               key={categoria}
               onClick={() => handleCategoriaClick(categoria)}
             >
-              {categoria}
+              {nomesCategorias[categoria] || categoria}
             </Button>
           ))}
         </div>
@@ -269,7 +304,7 @@ function Pedidos() {
             <ul>
               {pedido.itens.map((item, index) => (
                 <li key={index}>
-                  {item.nome} ({item.categoria}) x{item.quantidade} - R${' '}
+                  {item.nome} ({item.categoria}) x{item.quantidade} - R${" "}
                   {(item.preco * item.quantidade).toFixed(2)}
                   <button
                     type="button"
@@ -290,32 +325,69 @@ function Pedidos() {
         <h3>Total: R$ {calcularTotal(pedido.itens).toFixed(2)}</h3>
         <button type="submit">Enviar Pedido</button>
       </form>
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        centered
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Adicionar item</Modal.Title>
+          <Modal.Title>
+            <i className="bi bi-plus-circle me-2"></i>
+            Adicionar Item
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <select
-            value={itemAtual}
-            onChange={(e) => setItemAtual(e.target.value)}
-          >
-            <option value="">Selecione</option>
-            {Object.keys(menuItems[categoriaAtual] || {}).map((item) => (
-              <option key={item} value={item}>
-                {item} - R$ {menuItems[categoriaAtual][item].toFixed(2)}
-              </option>
-            ))}
-          </select>
-          <input
-            type="number"
-            value={quantidadeAtual}
-            onChange={(e) => setQuantidadeAtual(parseInt(e.target.value))}
-            min="1"
-          />
+
+        <Modal.Body className="px-4 py-3">
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Produto</Form.Label>
+              <Form.Select
+                value={itemAtual}
+                onChange={(e) => setItemAtual(e.target.value)}
+              >
+                <option value="">Selecione um item</option>
+
+                {Object.keys(menuItems[categoriaAtual] || {}).map((item) => (
+                  <option key={item} value={item}>
+                    {item} - R$ {menuItems[categoriaAtual][item].toFixed(2)}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Quantidade</Form.Label>
+              <Form.Control
+                type="number"
+                value={quantidadeAtual}
+                onChange={(e) =>
+                  setQuantidadeAtual(parseInt(e.target.value) || 1)
+                }
+                min="1"
+              />
+            </Form.Group>
+          </Form>
         </Modal.Body>
-        <Modal.Footer className="meu-footer-modal">
-          <Button onClick={() => setShowModal(false)}>Cancelar</Button>
-          <Button onClick={handleAdicionarItem}>Adicionar</Button>
+
+        <Modal.Footer className="border-0 px-4 pb-4">
+          <Button
+            variant="outline-secondary"
+            onClick={() => setShowModal(false)}
+          >
+            Cancelar
+          </Button>
+
+          <Button
+            variant="success"
+            onClick={handleAdicionarItem}
+            disabled={!itemAtual}
+            style={{
+              backgroundColor: '#8B4513',
+              borderColor: '#8B4513'
+            }}
+          >
+            Adicionar ao Pedido
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>
