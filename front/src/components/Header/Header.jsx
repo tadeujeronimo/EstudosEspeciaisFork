@@ -5,7 +5,7 @@ import './Header.css';
 
 function Header() {
   return (
-    <Navbar expand="lg" bg="brown" variant="dark" sticky="top">
+    <Navbar expand="lg" bg="brown" variant="light" sticky="top">
       <Container>
         <Navbar.Brand as={Link} to="/">
           Café Gourmet
