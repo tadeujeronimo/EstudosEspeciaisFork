@@ -12,7 +12,7 @@ const doc = {
       description: 'Development Server',
     },
     {
-      url: 'https://cafe-gourmet-back.vercel.app/api',
+      url: 'https://estudos-especiais-fork-back.vercel.app/api',
       description: 'Production Server',
     },
   ],
