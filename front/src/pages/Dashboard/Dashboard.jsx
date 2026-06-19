@@ -89,16 +89,6 @@ function Dashboard() {
           <p>R$ {totalHoje.toFixed(2)}</p>
         </div>
       </div>
-      <div className="progress">
-        <div
-          className="progress-bar concluido"
-          style={{ width: `${porcentagemConcluidos}%` }}
-        />
-        <div
-          className="progress-bar cancelado"
-          style={{ width: `${porcentagemCancelados}%` }}
-        />
-      </div>
       <div className="kanban">
         <div className="column">
           <h2>Pendentes</h2>
